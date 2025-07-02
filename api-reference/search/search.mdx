@@ -1,0 +1,478 @@
+---
+title: "Search"
+api: "GET https://api.tattoo.co/v1/search"
+description: "Unified search across studios, artists, and designs with advanced filtering"
+---
+
+Search across all Tattoo API entities including studios, artists, portfolios, and designs with intelligent ranking and filtering.
+
+## Search Types
+
+<CardGroup cols={2}>
+  <Card title="Unified Search" icon="magnifying-glass">
+    Search across all entity types with intelligent relevance ranking
+  </Card>
+  <Card title="Entity-Specific Search" icon="filter">
+    Search within specific entity types (studios, artists, designs)
+  </Card>
+</CardGroup>
+
+## Basic Search
+
+<CodeGroup>
+```javascript JavaScript
+const response = await fetch('https://api.tattoo.co/v1/search?q=traditional+tattoo+los+angeles', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+
+const results = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.tattoo.co/v1/search',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    params={'q': 'traditional tattoo los angeles'}
+)
+
+results = response.json()
+```
+
+```curl cURL
+curl "https://api.tattoo.co/v1/search?q=traditional+tattoo+los+angeles" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+</CodeGroup>
+
+### Query Parameters
+
+<ParamField query="q" type="string" required>
+  Search query string
+</ParamField>
+
+<ParamField query="type" type="string">
+  Entity type filter: `studios`, `artists`, `designs`, `all` (default: `all`)
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Number of results per page (default: 20, max: 100)
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number for pagination (default: 1)
+</ParamField>
+
+<ResponseExample>
+```json Response
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "type": "studio",
+        "relevance_score": 0.95,
+        "entity": {
+          "id": "studio_123",
+          "name": "Traditional Ink LA",
+          "description": "Premier traditional tattoo studio in Los Angeles",
+          "city": "Los Angeles",
+          "state": "CA",
+          "specialties": ["traditional", "neo-traditional"],
+          "rating": 4.8,
+          "review_count": 127,
+          "verified": true
+        }
+      },
+      {
+        "type": "artist",
+        "relevance_score": 0.89,
+        "entity": {
+          "id": "artist_456",
+          "name": "Mike Johnson",
+          "specialties": ["traditional", "american-traditional"],
+          "studio_name": "Ink Masters Studio",
+          "city": "Los Angeles",
+          "state": "CA",
+          "rating": 4.9,
+          "years_experience": 8
+        }
+      }
+    ],
+    "aggregations": {
+      "by_type": {
+        "studios": 15,
+        "artists": 23,
+        "designs": 45
+      },
+      "by_location": {
+        "Los Angeles, CA": 38,
+        "Hollywood, CA": 12,
+        "Santa Monica, CA": 8
+      },
+      "by_specialty": {
+        "traditional": 45,
+        "neo-traditional": 23,
+        "american-traditional": 18
+      }
+    }
+  },
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 83,
+    "hasNext": true
+  }
+}
+```
+</ResponseExample>
+
+## Geographic Search
+
+Search for entities within a specific geographic area:
+
+<CodeGroup>
+```javascript Geographic Search
+const response = await fetch('https://api.tattoo.co/v1/search?' + new URLSearchParams({
+  q: 'black and grey tattoo',
+  lat: 34.0522,
+  lng: -118.2437,
+  radius: 25, // 25 kilometers
+  type: 'studios'
+}), {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+
+```python Python
+response = requests.get(
+    'https://api.tattoo.co/v1/search',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    params={
+        'q': 'black and grey tattoo',
+        'lat': 34.0522,
+        'lng': -118.2437,
+        'radius': 25,
+        'type': 'studios'
+    }
+)
+```
+</CodeGroup>
+
+### Geographic Parameters
+
+<ParamField query="lat" type="number">
+  Latitude coordinate for geographic search
+</ParamField>
+
+<ParamField query="lng" type="number">
+  Longitude coordinate for geographic search  
+</ParamField>
+
+<ParamField query="radius" type="number">
+  Search radius in kilometers (default: 50, max: 500)
+</ParamField>
+
+## Advanced Filtering
+
+Apply multiple filters to refine search results:
+
+<CodeGroup>
+```javascript Advanced Filtering
+const response = await fetch('https://api.tattoo.co/v1/search?' + new URLSearchParams({
+  q: 'portrait tattoo',
+  type: 'artists',
+  specialties: 'realism,portrait,black-and-grey',
+  min_rating: '4.5',
+  experience_min: '5',
+  price_range: '$$$',
+  availability: 'next_30_days',
+  verified_only: 'true'
+}), {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+
+```python Python
+response = requests.get(
+    'https://api.tattoo.co/v1/search',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    params={
+        'q': 'portrait tattoo',
+        'type': 'artists',
+        'specialties': 'realism,portrait,black-and-grey',
+        'min_rating': '4.5',
+        'experience_min': '5',
+        'price_range': '$$$',
+        'availability': 'next_30_days',
+        'verified_only': 'true'
+    }
+)
+```
+</CodeGroup>
+
+### Filter Parameters
+
+<ParamField query="specialties" type="string">
+  Comma-separated list of specialties to filter by
+</ParamField>
+
+<ParamField query="min_rating" type="number">
+  Minimum rating (1.0 to 5.0)
+</ParamField>
+
+<ParamField query="price_range" type="string">
+  Price range filter: `$`, `$$`, `$$$`, `$$$$`
+</ParamField>
+
+<ParamField query="verified_only" type="boolean">
+  Show only verified entities (default: false)
+</ParamField>
+
+<ParamField query="availability" type="string">
+  Availability filter: `next_7_days`, `next_30_days`, `next_90_days`
+</ParamField>
+
+<ParamField query="experience_min" type="integer">
+  Minimum years of experience (for artists)
+</ParamField>
+
+## Search Autocomplete
+
+Get search suggestions and autocomplete results:
+
+<CodeGroup>
+```javascript Autocomplete
+const response = await fetch('https://api.tattoo.co/v1/search/autocomplete?q=trad', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+
+const suggestions = await response.json();
+```
+
+```python Python
+response = requests.get(
+    'https://api.tattoo.co/v1/search/autocomplete',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    params={'q': 'trad'}
+)
+
+suggestions = response.json()
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Autocomplete Response
+{
+  "success": true,
+  "data": {
+    "suggestions": [
+      {
+        "text": "traditional tattoo",
+        "type": "style",
+        "count": 1247
+      },
+      {
+        "text": "traditional american",
+        "type": "style", 
+        "count": 892
+      },
+      {
+        "text": "Traditional Ink Studio",
+        "type": "studio",
+        "id": "studio_123",
+        "location": "Los Angeles, CA"
+      }
+    ],
+    "popular_searches": [
+      "traditional tattoo near me",
+      "black and grey portrait",
+      "geometric tattoo designs"
+    ]
+  }
+}
+```
+</ResponseExample>
+
+## Faceted Search
+
+Get faceted search results with aggregated filter counts:
+
+<CodeGroup>
+```javascript Faceted Search
+const response = await fetch('https://api.tattoo.co/v1/search?' + new URLSearchParams({
+  q: 'tattoo',
+  facets: 'specialties,location,price_range,rating',
+  include_facet_counts: 'true'
+}), {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Faceted Response
+{
+  "success": true,
+  "data": {
+    "results": [...],
+    "facets": {
+      "specialties": [
+        {"value": "traditional", "count": 45, "selected": false},
+        {"value": "realism", "count": 32, "selected": false},
+        {"value": "geometric", "count": 28, "selected": false}
+      ],
+      "price_range": [
+        {"value": "$", "count": 12, "selected": false},
+        {"value": "$$", "count": 34, "selected": false},
+        {"value": "$$$", "count": 28, "selected": false},
+        {"value": "$$$$", "count": 9, "selected": false}
+      ],
+      "location": [
+        {"value": "Los Angeles, CA", "count": 38, "selected": false},
+        {"value": "New York, NY", "count": 25, "selected": false}
+      ]
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Search Ranking
+
+Search results are ranked using multiple factors:
+
+<AccordionGroup>
+  <Accordion title="Text Relevance">
+    Matches in name, description, and specialties with TF-IDF scoring
+  </Accordion>
+  
+  <Accordion title="Popularity Score">
+    Based on booking frequency, review count, and user engagement
+  </Accordion>
+  
+  <Accordion title="Quality Metrics">
+    Rating, verification status, and portfolio completeness
+  </Accordion>
+  
+  <Accordion title="Geographic Relevance">
+    Distance from search location (when provided)
+  </Accordion>
+  
+  <Accordion title="Freshness">
+    Recently updated profiles and active artists get priority
+  </Accordion>
+</AccordionGroup>
+
+## Search Analytics
+
+Track search performance and user behavior:
+
+<CodeGroup>
+```javascript Search Analytics
+// Track search event
+const response = await fetch('https://api.tattoo.co/v1/search/analytics', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    query: 'traditional tattoo los angeles',
+    results_count: 83,
+    user_action: 'clicked_result',
+    result_id: 'studio_123',
+    result_type: 'studio',
+    position: 1
+  })
+});
+```
+</CodeGroup>
+
+## Common Search Patterns
+
+### Popular Query Types
+
+<CardGroup cols={2}>
+  <Card title="Style + Location" icon="map-pin">
+    "traditional tattoo Los Angeles"
+  </Card>
+  <Card title="Artist Name" icon="user">
+    "Mike Johnson tattoo artist"
+  </Card>
+  <Card title="Studio Name" icon="store">
+    "Ink Masters Studio"
+  </Card>
+  <Card title="Design Type" icon="palette">
+    "dragon tattoo designs"
+  </Card>
+</CardGroup>
+
+### Search Best Practices
+
+<Tip>
+**Use Specific Terms**: More specific search terms yield better results. "Traditional American tattoo" is better than just "tattoo".
+</Tip>
+
+<Tip>
+**Combine Filters**: Use multiple filters together for precise results. Geographic + specialty + rating filters work well together.
+</Tip>
+
+<Warning>
+**Rate Limiting**: Search endpoints have a limit of 30 requests per minute. Use autocomplete sparingly and implement debouncing.
+</Warning>
+
+## Error Handling
+
+<AccordionGroup>
+  <Accordion title="invalid_query">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "invalid_query",
+        "message": "Search query is too short or contains invalid characters",
+        "details": {
+          "min_length": 2,
+          "provided_length": 1
+        }
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="invalid_coordinates">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "invalid_coordinates",
+        "message": "Invalid latitude or longitude coordinates",
+        "details": {
+          "lat": 91.0,
+          "lng": -181.0,
+          "valid_lat_range": "[-90, 90]",
+          "valid_lng_range": "[-180, 180]"
+        }
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+- [Studio Listings](/api-reference/studios/list) - Browse studios with filtering
+- [Artist Profiles](/api-reference/artists/list) - Find artists by specialty
+- [Geographic Search Guide](/guides/geographic-search) - Advanced location-based search

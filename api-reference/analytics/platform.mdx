@@ -1,0 +1,565 @@
+---
+title: "Platform Analytics"
+api: "GET https://api.tattoo.co/v1/analytics/platform"
+description: "Get comprehensive platform-wide analytics and business intelligence"
+---
+
+Access platform-wide analytics including user engagement, booking trends, revenue metrics, and business intelligence data. This endpoint requires platform admin permissions.
+
+## Overview Metrics
+
+Get high-level platform performance indicators:
+
+<CodeGroup>
+```javascript JavaScript
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+
+const analytics = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.tattoo.co/v1/analytics/platform',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
+)
+
+analytics = response.json()
+```
+
+```curl cURL
+curl "https://api.tattoo.co/v1/analytics/platform" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+</CodeGroup>
+
+### Query Parameters
+
+<ParamField query="period" type="string">
+  Time period: `7d`, `30d`, `90d`, `1y` (default: `30d`)
+</ParamField>
+
+<ParamField query="metrics" type="string">
+  Comma-separated metrics to include: `bookings`, `revenue`, `users`, `studios`, `searches`
+</ParamField>
+
+<ParamField query="granularity" type="string">
+  Data granularity: `hour`, `day`, `week`, `month` (default: `day`)
+</ParamField>
+
+<ResponseExample>
+```json Response
+{
+  "success": true,
+  "data": {
+    "period": {
+      "start": "2024-01-01T00:00:00Z",
+      "end": "2024-01-31T23:59:59Z",
+      "days": 31
+    },
+    "overview": {
+      "total_bookings": 12847,
+      "booking_growth": 15.3,
+      "total_revenue": 1284750,
+      "revenue_growth": 22.1,
+      "active_users": 45293,
+      "user_growth": 8.7,
+      "total_studios": 3421,
+      "studio_growth": 12.4,
+      "total_artists": 8947,
+      "artist_growth": 18.9,
+      "search_queries": 234891,
+      "search_growth": 31.2
+    },
+    "booking_metrics": {
+      "completion_rate": 0.874,
+      "cancellation_rate": 0.089,
+      "average_booking_value": 285.50,
+      "booking_lead_time_avg": 14.5,
+      "popular_times": {
+        "weekday": ["14:00", "16:00", "18:00"],
+        "weekend": ["11:00", "13:00", "15:00"]
+      }
+    },
+    "revenue_metrics": {
+      "total_revenue": 1284750,
+      "platform_fee_revenue": 89932,
+      "average_transaction": 285.50,
+      "revenue_by_payment_type": {
+        "deposit": 456320,
+        "full_payment": 828430
+      },
+      "refunds": {
+        "total_amount": 23450,
+        "refund_rate": 0.0182
+      }
+    },
+    "user_engagement": {
+      "daily_active_users": 8943,
+      "monthly_active_users": 45293,
+      "session_duration_avg": 847,
+      "pages_per_session": 4.2,
+      "bounce_rate": 0.23,
+      "return_user_rate": 0.67
+    },
+    "geographic_distribution": {
+      "top_cities": [
+        {"city": "Los Angeles", "state": "CA", "bookings": 1247, "revenue": 142850},
+        {"city": "New York", "state": "NY", "bookings": 1089, "revenue": 128940},
+        {"city": "Miami", "state": "FL", "bookings": 892, "revenue": 98750}
+      ],
+      "international": {
+        "total_countries": 12,
+        "top_countries": ["United States", "Canada", "United Kingdom"]
+      }
+    },
+    "trends": {
+      "daily_bookings": [
+        {"date": "2024-01-01", "bookings": 387, "revenue": 44250},
+        {"date": "2024-01-02", "bookings": 412, "revenue": 47890}
+      ],
+      "popular_styles": [
+        {"style": "traditional", "bookings": 2847, "growth": 12.3},
+        {"style": "realism", "bookings": 2156, "growth": 18.7},
+        {"style": "geometric", "bookings": 1789, "growth": 25.1}
+      ]
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Revenue Analytics
+
+Get detailed revenue and financial metrics:
+
+<CodeGroup>
+```javascript Revenue Analytics
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform?metrics=revenue&period=90d', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+
+```python Python
+response = requests.get(
+    'https://api.tattoo.co/v1/analytics/platform',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    params={'metrics': 'revenue', 'period': '90d'}
+)
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Revenue Response
+{
+  "success": true,
+  "data": {
+    "revenue_metrics": {
+      "total_revenue": 3847250,
+      "platform_commission": 269075,
+      "commission_rate": 0.07,
+      "average_transaction": 298.45,
+      "median_transaction": 225.00,
+      "revenue_by_category": {
+        "bookings": 3456780,
+        "cancellation_fees": 45890,
+        "platform_services": 344580
+      },
+      "monthly_recurring_revenue": 124850,
+      "revenue_retention_rate": 0.89,
+      "churn_impact": -23450
+    },
+    "payment_analytics": {
+      "payment_methods": {
+        "credit_card": 0.78,
+        "digital_wallet": 0.19,
+        "bank_transfer": 0.03
+      },
+      "payment_success_rate": 0.943,
+      "failed_payments": 234,
+      "dispute_rate": 0.0045,
+      "refund_analytics": {
+        "total_refunds": 87450,
+        "refund_rate": 0.0227,
+        "avg_refund_amount": 156.75,
+        "refund_reasons": {
+          "cancellation": 0.67,
+          "quality_issue": 0.18,
+          "scheduling_conflict": 0.15
+        }
+      }
+    }
+  }
+}
+```
+</ResponseExample>
+
+## User Analytics
+
+Analyze user behavior and engagement patterns:
+
+<CodeGroup>
+```javascript User Analytics
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform?metrics=users&granularity=week', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json User Analytics Response
+{
+  "success": true,
+  "data": {
+    "user_metrics": {
+      "total_users": 127843,
+      "new_users_period": 8947,
+      "user_growth_rate": 0.075,
+      "user_segmentation": {
+        "clients": 98743,
+        "artists": 15890,
+        "studio_owners": 8947,
+        "platform_admins": 15
+      },
+      "user_lifecycle": {
+        "activation_rate": 0.73,
+        "retention_7d": 0.68,
+        "retention_30d": 0.43,
+        "retention_90d": 0.31
+      }
+    },
+    "engagement_metrics": {
+      "daily_active_users": 12847,
+      "weekly_active_users": 34567,
+      "monthly_active_users": 78943,
+      "session_metrics": {
+        "avg_session_duration": 892,
+        "sessions_per_user": 3.4,
+        "pages_per_session": 5.1,
+        "bounce_rate": 0.21
+      },
+      "feature_usage": {
+        "search": 0.89,
+        "booking": 0.67,
+        "portfolio_view": 0.54,
+        "reviews": 0.23,
+        "favorites": 0.31
+      }
+    },
+    "conversion_funnel": {
+      "search_to_view": 0.34,
+      "view_to_booking": 0.12,
+      "booking_to_completion": 0.87,
+      "overall_conversion": 0.035
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Studio Performance
+
+Analyze studio network performance and health:
+
+<CodeGroup>
+```javascript Studio Analytics
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform?metrics=studios', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Studio Analytics Response
+{
+  "success": true,
+  "data": {
+    "studio_metrics": {
+      "total_studios": 4521,
+      "active_studios": 4123,
+      "verified_studios": 3892,
+      "new_studios_period": 287,
+      "studio_utilization": {
+        "high_booking": 1247,
+        "medium_booking": 2156,
+        "low_booking": 720
+      },
+      "performance_tiers": {
+        "top_10_percent": {
+          "studios": 452,
+          "avg_monthly_bookings": 147,
+          "avg_monthly_revenue": 18450
+        },
+        "bottom_10_percent": {
+          "studios": 452,
+          "avg_monthly_bookings": 12,
+          "avg_monthly_revenue": 1250
+        }
+      }
+    },
+    "geographic_performance": {
+      "top_performing_cities": [
+        {
+          "city": "Los Angeles",
+          "state": "CA",
+          "studios": 287,
+          "avg_rating": 4.6,
+          "total_bookings": 8947,
+          "market_penetration": 0.73
+        }
+      ],
+      "expansion_opportunities": [
+        {
+          "city": "Austin",
+          "state": "TX",
+          "demand_score": 8.4,
+          "competition_level": "medium",
+          "estimated_potential": 45
+        }
+      ]
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Search Analytics
+
+Understand search behavior and optimize discovery:
+
+<CodeGroup>
+```javascript Search Analytics
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform?metrics=searches', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Search Analytics Response
+{
+  "success": true,
+  "data": {
+    "search_metrics": {
+      "total_searches": 456789,
+      "unique_queries": 34567,
+      "avg_searches_per_user": 4.2,
+      "search_success_rate": 0.78,
+      "zero_result_rate": 0.089
+    },
+    "popular_queries": [
+      {"query": "traditional tattoo", "count": 8947, "conversion_rate": 0.12},
+      {"query": "black and grey portrait", "count": 6734, "conversion_rate": 0.15},
+      {"query": "geometric tattoo designs", "count": 5892, "conversion_rate": 0.09}
+    ],
+    "search_trends": {
+      "trending_up": [
+        {"query": "fine line tattoos", "growth": 0.45},
+        {"query": "minimalist tattoo", "growth": 0.38}
+      ],
+      "trending_down": [
+        {"query": "tribal tattoo", "growth": -0.23}
+      ]
+    },
+    "geographic_search_patterns": {
+      "local_vs_remote": {
+        "local_searches": 0.67,
+        "remote_searches": 0.33
+      },
+      "avg_search_radius": 25.4
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Time-Series Data
+
+Get detailed time-series analytics for trend analysis:
+
+<CodeGroup>
+```javascript Time-Series Data
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform?' + new URLSearchParams({
+  period: '90d',
+  granularity: 'day',
+  metrics: 'bookings,revenue',
+  format: 'time_series'
+}), {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Time-Series Response
+{
+  "success": true,
+  "data": {
+    "time_series": {
+      "bookings": [
+        {"timestamp": "2024-01-01T00:00:00Z", "value": 387},
+        {"timestamp": "2024-01-02T00:00:00Z", "value": 412},
+        {"timestamp": "2024-01-03T00:00:00Z", "value": 356}
+      ],
+      "revenue": [
+        {"timestamp": "2024-01-01T00:00:00Z", "value": 44250},
+        {"timestamp": "2024-01-02T00:00:00Z", "value": 47890},
+        {"timestamp": "2024-01-03T00:00:00Z", "value": 41230}
+      ]
+    },
+    "statistics": {
+      "bookings": {
+        "mean": 387.5,
+        "median": 389.0,
+        "std_dev": 45.2,
+        "trend": "increasing",
+        "seasonality": "weekend_peak"
+      },
+      "revenue": {
+        "mean": 44456.7,
+        "median": 44890.0,
+        "std_dev": 5234.1,
+        "trend": "increasing",
+        "correlation_with_bookings": 0.89
+      }
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Custom Reports
+
+Generate custom analytics reports with specific filters:
+
+<CodeGroup>
+```javascript Custom Report
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform/custom', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Q1 Performance Report',
+    metrics: ['bookings', 'revenue', 'user_acquisition'],
+    filters: {
+      date_range: {
+        start: '2024-01-01',
+        end: '2024-03-31'
+      },
+      geographic: {
+        countries: ['US', 'CA'],
+        states: ['CA', 'NY', 'FL']
+      },
+      studio_tiers: ['premium', 'verified']
+    },
+    grouping: ['month', 'state'],
+    format: 'json'
+  })
+});
+```
+</CodeGroup>
+
+## Data Export
+
+Export analytics data for external analysis:
+
+<CodeGroup>
+```javascript Export Data
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform/export', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    format: 'csv',
+    metrics: ['bookings', 'revenue', 'users'],
+    period: '90d',
+    email_to: 'analytics@tattoo.co'
+  })
+});
+```
+</CodeGroup>
+
+## Real-Time Metrics
+
+Get real-time platform metrics for live dashboards:
+
+<CodeGroup>
+```javascript Real-Time Metrics
+const response = await fetch('https://api.tattoo.co/v1/analytics/platform/realtime', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+```
+</CodeGroup>
+
+<ResponseExample>
+```json Real-Time Response
+{
+  "success": true,
+  "data": {
+    "timestamp": "2024-01-15T14:30:45Z",
+    "active_users": 2847,
+    "bookings_today": 156,
+    "revenue_today": 18450,
+    "searches_last_hour": 234,
+    "top_active_cities": [
+      {"city": "Los Angeles", "active_users": 387},
+      {"city": "New York", "active_users": 298}
+    ],
+    "system_health": {
+      "api_response_time": 145,
+      "database_connections": 234,
+      "error_rate": 0.002
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Access Control
+
+<Warning>
+**Admin Only**: Platform analytics require platform admin permissions. Contact support to request access.
+</Warning>
+
+### Permission Levels
+
+| Permission | Access Level |
+|-----------|--------------|
+| `analytics:platform:read` | View all platform analytics |
+| `analytics:platform:export` | Export analytics data |
+| `analytics:platform:custom` | Create custom reports |
+
+## Rate Limits
+
+Platform analytics endpoints have higher rate limits:
+
+- **Standard Analytics**: 100 requests per hour
+- **Real-time Metrics**: 300 requests per hour  
+- **Export Operations**: 10 requests per hour
+
+## Next Steps
+
+- [Studio Analytics](/api-reference/analytics/studio) - Studio-specific metrics
+- [Artist Analytics](/api-reference/analytics/artist) - Artist performance data
+- [Custom Reports](/guides/custom-reports) - Build custom analytics reports

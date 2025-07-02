@@ -74,7 +74,15 @@
             "api-reference/authentication/register",
             "api-reference/authentication/login",
             "api-reference/authentication/refresh",
-            "api-reference/authentication/profile"
+            "api-reference/authentication/profile",
+            "api-reference/authentication/api-keys"
+          ]
+        },
+        {
+          "group": "Search & Discovery",
+          "pages": [
+            "api-reference/search/search",
+            "api-reference/search/autocomplete"
           ]
         },
         {
@@ -116,6 +124,14 @@
           ]
         },
         {
+          "group": "Payments",
+          "pages": [
+            "api-reference/payments/process",
+            "api-reference/payments/list",
+            "api-reference/payments/refund"
+          ]
+        },
+        {
           "group": "Reviews",
           "pages": [
             "api-reference/reviews/list",
@@ -126,9 +142,34 @@
         {
           "group": "Analytics",
           "pages": [
+            "api-reference/analytics/platform",
             "api-reference/analytics/studio",
-            "api-reference/analytics/artist",
-            "api-reference/analytics/platform"
+            "api-reference/analytics/artist"
+          ]
+        },
+        {
+          "group": "Portfolios & Designs",
+          "pages": [
+            "api-reference/portfolios/list",
+            "api-reference/portfolios/create",
+            "api-reference/designs/list",
+            "api-reference/designs/upload"
+          ]
+        },
+        {
+          "group": "Brand Management",
+          "pages": [
+            "api-reference/brands/list",
+            "api-reference/brands/create",
+            "api-reference/brands/analytics"
+          ]
+        },
+        {
+          "group": "Notifications",
+          "pages": [
+            "api-reference/notifications/list",
+            "api-reference/notifications/send",
+            "api-reference/notifications/preferences"
           ]
         }
       ]
@@ -139,6 +180,8 @@
         "guides/getting-started",
         "guides/studio-management",
         "guides/booking-workflow",
+        "guides/payment-integration",
+        "guides/geographic-search",
         "guides/webhooks",
         "guides/rate-limits",
         "guides/errors"
