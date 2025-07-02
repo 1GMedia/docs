@@ -1,0 +1,913 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tattoo API",
+    "description": "The world's most comprehensive API for tattoo studio management, artist portfolios, and booking systems. Built for developers who want to integrate tattoo services into their applications.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "api-support@tattoo.co",
+      "url": "https://docs.tattoo.co"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "termsOfService": "https://tattoo.co/terms"
+  },
+  "servers": [
+    {
+      "url": "https://api.tattoo.co/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://staging-api.tattoo.co/v1", 
+      "description": "Staging server"
+    },
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Development server"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Check the health status of the API and its dependencies",
+        "tags": ["System"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "API is unhealthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studios": {
+      "get": {
+        "summary": "List Studios",
+        "description": "Retrieve a paginated list of tattoo studios with optional filtering",
+        "tags": ["Studios"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query", 
+            "description": "Number of results per page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term for studio name, description, or city",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "description": "Filter by city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter by state",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verified",
+            "in": "query",
+            "description": "Filter by verification status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude for location-based search",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude for location-based search", 
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "Search radius in kilometers",
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of studios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudiosResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Studio",
+        "description": "Create a new tattoo studio (requires admin permissions)",
+        "tags": ["Studios"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudioCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Studio created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Register User",
+        "description": "Register a new user account",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login User",
+        "description": "Authenticate user and get access tokens",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token for authenticated requests"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "API key for server-to-server requests"
+      }
+    },
+    "schemas": {
+      "Studio": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique studio identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Studio name",
+            "example": "Ink Masters Studio"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Studio description"
+          },
+          "address": {
+            "type": "string",
+            "description": "Street address"
+          },
+          "city": {
+            "type": "string", 
+            "description": "City name"
+          },
+          "state": {
+            "type": "string",
+            "description": "State or province"
+          },
+          "zip_code": {
+            "type": "string",
+            "nullable": true,
+            "description": "Postal code"
+          },
+          "country": {
+            "type": "string",
+            "default": "USA",
+            "description": "Country"
+          },
+          "latitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude coordinate"
+          },
+          "longitude": {
+            "type": "number", 
+            "nullable": true,
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude coordinate"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Phone number"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true,
+            "description": "Email address"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "Website URL"
+          },
+          "instagram": {
+            "type": "string",
+            "nullable": true,
+            "description": "Instagram handle"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Average rating"
+          },
+          "review_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of reviews"
+          },
+          "specialties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of studio specialties"
+          },
+          "price_range": {
+            "type": "string",
+            "enum": ["$", "$$", "$$$", "$$$$"],
+            "nullable": true,
+            "description": "Price range indicator"
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "Verification status"
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Featured status"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updated_at": {
+            "type": "string", 
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        },
+        "required": ["id", "name", "address", "city", "state", "country", "rating", "review_count", "verified", "featured", "created_at", "updated_at"]
+      },
+      "StudioCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Studio name"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Studio description"
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Street address"
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "City name"
+          },
+          "state": {
+            "type": "string", 
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "State or province"
+          },
+          "zip_code": {
+            "type": "string",
+            "maxLength": 20,
+            "nullable": true,
+            "description": "Postal code"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "default": "USA",
+            "description": "Country"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "nullable": true,
+            "description": "Phone number"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true,
+            "description": "Email address"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "Website URL"
+          },
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "nullable": true,
+            "description": "Latitude coordinate"
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "nullable": true,
+            "description": "Longitude coordinate"
+          },
+          "specialties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "Array of studio specialties"
+          },
+          "price_range": {
+            "type": "string",
+            "enum": ["$", "$$", "$$$", "$$$$"],
+            "nullable": true,
+            "description": "Price range indicator"
+          },
+          "verified": {
+            "type": "boolean",
+            "default": false,
+            "description": "Verification status"
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Featured status"
+          }
+        },
+        "required": ["name", "address", "city", "state"]
+      },
+      "UserRegister": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Password (minimum 8 characters)"
+          },
+          "full_name": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Full name"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Phone number"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Date of birth"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["client", "artist", "studio_owner"],
+            "default": "client",
+            "description": "User role"
+          }
+        },
+        "required": ["email", "password", "full_name"]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "User ID"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Full name"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Phone number"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["client", "artist", "studio_owner", "admin"],
+            "description": "User role"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        },
+        "required": ["id", "email", "full_name", "role", "created_at", "updated_at"]
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "integer", 
+            "minimum": 1,
+            "description": "Items per page"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total number of items"
+          },
+          "totalPages": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total number of pages"
+          },
+          "hasNext": {
+            "type": "boolean",
+            "description": "Whether there are more pages"
+          },
+          "hasPrev": {
+            "type": "boolean",
+            "description": "Whether there are previous pages"
+          }
+        },
+        "required": ["page", "limit", "total", "totalPages", "hasNext", "hasPrev"]
+      },
+      "StudiosResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Studio"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["success", "data", "pagination", "error"]
+      },
+      "StudioResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Studio"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["success", "data", "error"]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              },
+              "access_token": {
+                "type": "string",
+                "description": "JWT access token"
+              },
+              "refresh_token": {
+                "type": "string",
+                "description": "JWT refresh token"
+              },
+              "expires_in": {
+                "type": "integer",
+                "description": "Token expiration time in seconds"
+              }
+            },
+            "required": ["user", "access_token", "refresh_token", "expires_in"]
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["success", "data", "error"]
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["healthy", "degraded", "unhealthy"],
+                "description": "Overall health status"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Health check timestamp"
+              },
+              "version": {
+                "type": "string",
+                "description": "API version"
+              },
+              "uptime": {
+                "type": "number",
+                "description": "Server uptime in seconds"
+              },
+              "services": {
+                "type": "object",
+                "properties": {
+                  "database": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "enum": ["healthy", "error"]
+                      },
+                      "responseTime": {
+                        "type": "number",
+                        "description": "Database response time in milliseconds"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["status", "timestamp", "version", "uptime"]
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["success", "data", "error"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              },
+              "code": {
+                "type": "string",
+                "description": "Error code"
+              },
+              "details": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              }
+            },
+            "required": ["message", "code"]
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "request_id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": ["success", "error"]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "System",
+      "description": "System health and status endpoints"
+    },
+    {
+      "name": "Authentication", 
+      "description": "User authentication and authorization"
+    },
+    {
+      "name": "Studios",
+      "description": "Tattoo studio management"
+    },
+    {
+      "name": "Artists",
+      "description": "Artist profiles and management"
+    },
+    {
+      "name": "Bookings",
+      "description": "Appointment booking and management"
+    },
+    {
+      "name": "Clients",
+      "description": "Client management"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
----
-title: Introduction
-description: "Welcome to the home of your new documentation"
----
+# Welcome to the Tattoo API
+
+The world's most comprehensive API for tattoo studio management, artist portfolios, and booking systems. Built for developers who want to integrate tattoo services into their applications.
 
 <img
   className="block dark:hidden"
@@ -14,58 +13,141 @@ description: "Welcome to the home of your new documentation"
   alt="Hero Dark"
 />
 
-## Setting up
+## What can you build?
 
-The first step to world-class documentation is setting up your editing environments.
-
-<CardGroup cols={2}>
-  <Card
-    title="Edit Your Docs"
-    icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
-  >
-    Get your docs set up locally for easy development
-  </Card>
-  <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
-  >
-    Preview your changes before you push to make sure they're perfect
-  </Card>
-</CardGroup>
-
-## Make it yours
-
-Update your docs to your brand and add valuable content for the best user conversion.
+The Tattoo API enables you to build powerful applications for the tattoo industry:
 
 <CardGroup cols={2}>
   <Card
-    title="Customize Style"
+    title="Studio Management"
+    icon="store"
+    href="/concepts/studios"
+  >
+    Manage studio locations, artists, portfolios, and business operations
+  </Card>
+  <Card
+    title="Booking Systems"
+    icon="calendar"
+    href="/concepts/bookings"
+  >
+    Create seamless appointment booking experiences for clients and artists
+  </Card>
+  <Card
+    title="Artist Portfolios"
     icon="palette"
-    href="https://mintlify.com/docs/settings/global"
+    href="/concepts/artists"
   >
-    Customize your docs to your company's colors and brands
+    Build rich portfolio management and discovery platforms
   </Card>
   <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
+    title="Client Management"
+    icon="users"
+    href="/concepts/clients"
   >
-    Automatically generate endpoints from an OpenAPI spec
-  </Card>
-  <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/content/components/accordions"
-  >
-    Build interactive features and designs to guide your users
-  </Card>
-  <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
-  >
-    Check out our showcase of our favorite documentation
+    Handle client profiles, preferences, and booking history
   </Card>
 </CardGroup>
+
+## Core Features
+
+<AccordionGroup>
+  <Accordion title="🏢 Comprehensive Studio Data">
+    Access detailed information about 10,000+ tattoo studios worldwide, including location data, specialties, pricing, and reviews.
+  </Accordion>
+
+  <Accordion title="👨‍🎨 Artist Profiles & Portfolios">
+    Rich artist data with portfolios, specialties, availability, and booking information.
+  </Accordion>
+
+  <Accordion title="📅 Advanced Booking System">
+    Full-featured booking API with availability checking, appointment management, and automated notifications.
+  </Accordion>
+
+  <Accordion title="🔐 Enterprise Security">
+    JWT authentication, role-based access control, and comprehensive API key management.
+  </Accordion>
+
+  <Accordion title="📊 Analytics & Insights">
+    Detailed analytics on studio performance, booking trends, and industry insights.
+  </Accordion>
+
+  <Accordion title="🔄 Real-time Updates">
+    WebSocket support for real-time booking updates and notifications.
+  </Accordion>
+</AccordionGroup>
+
+## API Architecture
+
+Our API follows RESTful principles and returns JSON responses. All requests must be made over HTTPS.
+
+```json
+{
+  "success": true,
+  "data": {
+    "studios": [...],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 150,
+      "hasNext": true
+    }
+  },
+  "meta": {
+    "timestamp": "2025-01-15T10:00:00Z",
+    "version": "1.0.0"
+  }
+}
+```
+
+## Quick Start
+
+Get started with the Tattoo API in under 5 minutes:
+
+<Steps>
+  <Step title="Get API Key">
+    Sign up at [tattoo.co/developers](https://tattoo.co/developers) to get your API key
+  </Step>
+  <Step title="Make First Request">
+    Try the API with a simple studio search request
+  </Step>
+  <Step title="Explore Endpoints">
+    Browse our comprehensive API reference documentation
+  </Step>
+  <Step title="Build Your App">
+    Start integrating the API into your application
+  </Step>
+</Steps>
+
+## Popular Use Cases
+
+<CardGroup cols={3}>
+  <Card title="Marketplace Apps" icon="store">
+    Build platforms connecting tattoo artists with clients
+  </Card>
+  <Card title="Studio Management" icon="chart-line">
+    Create comprehensive business management tools
+  </Card>
+  <Card title="Discovery Apps" icon="magnifying-glass">
+    Help users find the perfect tattoo artist or studio
+  </Card>
+  <Card title="Booking Platforms" icon="calendar-check">
+    Streamline appointment scheduling and management
+  </Card>
+  <Card title="Portfolio Websites" icon="images">
+    Showcase artist work and attract new clients
+  </Card>
+  <Card title="Analytics Dashboards" icon="chart-bar">
+    Provide insights into studio and artist performance
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+- 📖 [API Reference](/api-reference) - Complete endpoint documentation
+- 🚀 [Quick Start Guide](/quickstart) - Get up and running quickly  
+- 💬 [Discord Community](https://discord.gg/tattoo-co) - Connect with other developers
+- 📧 [Support](mailto:api-support@tattoo.co) - Get direct help from our team
+
+<Tip>
+**New to APIs?** Check out our [beginner's guide](/guides/getting-started) to learn the basics of working with the Tattoo API.
+</Tip>

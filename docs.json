@@ -1,102 +1,159 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
-  "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Tattoo API Documentation",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Essentials",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:api-support@tattoo.co"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://tattoo.co"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    {
+      "name": "Guides",
+      "url": "guides"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/Tattoo-co"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.gg/tattoo-co"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "authentication"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "concepts/studios",
+        "concepts/artists",
+        "concepts/bookings",
+        "concepts/clients"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "group": "Authentication",
+          "pages": [
+            "api-reference/authentication/register",
+            "api-reference/authentication/login",
+            "api-reference/authentication/refresh",
+            "api-reference/authentication/profile"
+          ]
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "group": "Studios",
+          "pages": [
+            "api-reference/studios/list",
+            "api-reference/studios/get",
+            "api-reference/studios/create",
+            "api-reference/studios/update",
+            "api-reference/studios/delete"
+          ]
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "group": "Artists",
+          "pages": [
+            "api-reference/artists/list",
+            "api-reference/artists/get",
+            "api-reference/artists/create",
+            "api-reference/artists/update"
+          ]
+        },
+        {
+          "group": "Bookings",
+          "pages": [
+            "api-reference/bookings/list",
+            "api-reference/bookings/get",
+            "api-reference/bookings/create",
+            "api-reference/bookings/update",
+            "api-reference/bookings/cancel"
+          ]
+        },
+        {
+          "group": "Clients",
+          "pages": [
+            "api-reference/clients/list",
+            "api-reference/clients/get",
+            "api-reference/clients/create",
+            "api-reference/clients/update"
+          ]
+        },
+        {
+          "group": "Reviews",
+          "pages": [
+            "api-reference/reviews/list",
+            "api-reference/reviews/create",
+            "api-reference/reviews/update"
+          ]
+        },
+        {
+          "group": "Analytics",
+          "pages": [
+            "api-reference/analytics/studio",
+            "api-reference/analytics/artist",
+            "api-reference/analytics/platform"
+          ]
         }
       ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/getting-started",
+        "guides/studio-management",
+        "guides/booking-workflow",
+        "guides/webhooks",
+        "guides/rate-limits",
+        "guides/errors"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/Tattoo-co",
+    "linkedin": "https://linkedin.com/company/tattoo-co"
+  },
+  "api": {
+    "baseUrl": "https://api.tattoo.co/v1",
+    "auth": {
+      "method": "bearer"
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
-  }
+  "openapi": "/openapi.json"
 }
