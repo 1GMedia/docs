@@ -22,48 +22,35 @@
     "name": "Dashboard",
     "url": "https://tattoo.co"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    },
-    {
-      "name": "Guides",
-      "url": "guides"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "GitHub",
-      "icon": "github",
-      "url": "https://github.com/Tattoo-co"
-    },
-    {
-      "name": "Community",
-      "icon": "discord",
-      "url": "https://discord.gg/tattoo-co"
-    }
-  ],
-  "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "authentication"
-      ]
-    },
-    {
-      "group": "Core Concepts",
-      "pages": [
-        "concepts/studios",
-        "concepts/artists",
-        "concepts/bookings",
-        "concepts/clients"
-      ]
-    },
-    {
-      "group": "API Reference",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/studios",
+              "concepts/artists",
+              "concepts/bookings",
+              "concepts/clients"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API Reference",
       "pages": [
         {
           "group": "Authentication",
@@ -178,21 +165,41 @@
           ]
         }
       ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "guides/getting-started",
-        "guides/studio-management",
-        "guides/booking-workflow",
-        "guides/payment-integration",
-        "guides/geographic-search",
-        "guides/webhooks",
-        "guides/rate-limits",
-        "guides/errors"
-      ]
-    }
-  ],
+           }
+         ]
+       },
+       {
+         "tab": "Guides",
+         "groups": [
+           {
+             "group": "Guides",
+             "pages": [
+               "guides/getting-started",
+               "guides/studio-management",
+               "guides/booking-workflow",
+               "guides/payment-integration",
+               "guides/geographic-search",
+               "guides/webhooks",
+               "guides/rate-limits",
+               "guides/errors"
+             ]
+           }
+         ]
+       }
+     ]
+   },
+   "anchors": [
+     {
+       "name": "GitHub",
+       "icon": "github",
+       "url": "https://github.com/Tattoo-co"
+     },
+     {
+       "name": "Community",
+       "icon": "discord",
+       "url": "https://discord.gg/tattoo-co"
+     }
+   ],
   "footerSocials": {
     "github": "https://github.com/Tattoo-co",
     "linkedin": "https://linkedin.com/company/tattoo-co"
