@@ -1,7 +1,7 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "Tattoo API Documentation",
-  "theme": "venus",
+  "theme": "mint",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -50,123 +50,118 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Reference",
-      "pages": [
-        {
-          "group": "Authentication",
-          "pages": [
-            "api-reference/authentication/register",
-            "api-reference/authentication/login",
-            "api-reference/authentication/refresh",
-            "api-reference/authentication/profile",
-            "api-reference/authentication/api-keys"
-          ]
-        },
-        {
-          "group": "Search & Discovery",
-          "pages": [
-            "api-reference/search/search",
-            "api-reference/search/autocomplete"
-          ]
-        },
-        {
-          "group": "Studios",
-          "pages": [
-            "api-reference/studios/list",
-            "api-reference/studios/get",
-            "api-reference/studios/create",
-            "api-reference/studios/update",
-            "api-reference/studios/delete"
-          ]
-        },
-        {
-          "group": "Artists",
-          "pages": [
-            "api-reference/artists/list",
-            "api-reference/artists/get",
-            "api-reference/artists/create",
-            "api-reference/artists/update"
-          ]
-        },
-        {
-          "group": "Bookings",
-          "pages": [
-            "api-reference/bookings/list",
-            "api-reference/bookings/get",
-            "api-reference/bookings/create",
-            "api-reference/bookings/update",
-            "api-reference/bookings/cancel"
-          ]
-        },
-        {
-          "group": "Clients",
-          "pages": [
-            "api-reference/clients/list",
-            "api-reference/clients/get",
-            "api-reference/clients/create",
-            "api-reference/clients/update"
-          ]
-        },
-        {
-          "group": "Payments",
-          "pages": [
-            "api-reference/payments/process",
-            "api-reference/payments/list",
-            "api-reference/payments/refund"
-          ]
-        },
-        {
-          "group": "Reviews",
-          "pages": [
-            "api-reference/reviews/list",
-            "api-reference/reviews/create",
-            "api-reference/reviews/update"
-          ]
-        },
-        {
-          "group": "Analytics",
-          "pages": [
-            "api-reference/analytics/platform",
-            "api-reference/analytics/studio",
-            "api-reference/analytics/artist"
-          ]
-        },
-        {
-          "group": "Portfolios & Designs",
-          "pages": [
-            "api-reference/portfolios/list",
-            "api-reference/portfolios/create",
-            "api-reference/designs/list",
-            "api-reference/designs/upload"
-          ]
-        },
-        {
-          "group": "Brand Management",
-          "pages": [
-            "api-reference/brands/list",
-            "api-reference/brands/create",
-            "api-reference/brands/analytics"
-          ]
-        },
-        {
-          "group": "Notifications",
-          "pages": [
-            "api-reference/notifications/list",
-            "api-reference/notifications/send",
-            "api-reference/notifications/preferences"
-          ]
-        },
-        {
-          "group": "System",
-          "pages": [
-            "api-reference/system/health",
-            "api-reference/system/status",
-            "api-reference/system/metrics"
-          ]
-        }
-      ]
-           }
-         ]
+            "group": "Authentication",
+            "pages": [
+              "api-reference/authentication/register",
+              "api-reference/authentication/login",
+              "api-reference/authentication/refresh",
+              "api-reference/authentication/profile",
+              "api-reference/authentication/api-keys"
+            ]
+          },
+          {
+            "group": "Search & Discovery",
+            "pages": [
+              "api-reference/search/search",
+              "api-reference/search/autocomplete"
+            ]
+          },
+          {
+            "group": "Studios",
+            "pages": [
+              "api-reference/studios/list",
+              "api-reference/studios/get",
+              "api-reference/studios/create",
+              "api-reference/studios/update",
+              "api-reference/studios/delete"
+            ]
+          },
+          {
+            "group": "Artists",
+            "pages": [
+              "api-reference/artists/list",
+              "api-reference/artists/get",
+              "api-reference/artists/create",
+              "api-reference/artists/update"
+            ]
+          },
+          {
+            "group": "Bookings",
+            "pages": [
+              "api-reference/bookings/list",
+              "api-reference/bookings/get",
+              "api-reference/bookings/create",
+              "api-reference/bookings/update",
+              "api-reference/bookings/cancel"
+            ]
+          },
+          {
+            "group": "Clients",
+            "pages": [
+              "api-reference/clients/list",
+              "api-reference/clients/get",
+              "api-reference/clients/create",
+              "api-reference/clients/update"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "api-reference/payments/process",
+              "api-reference/payments/list",
+              "api-reference/payments/refund"
+            ]
+          },
+          {
+            "group": "Reviews",
+            "pages": [
+              "api-reference/reviews/list",
+              "api-reference/reviews/create",
+              "api-reference/reviews/update"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "pages": [
+              "api-reference/analytics/platform",
+              "api-reference/analytics/studio",
+              "api-reference/analytics/artist"
+            ]
+          },
+          {
+            "group": "Portfolios & Designs",
+            "pages": [
+              "api-reference/portfolios/list",
+              "api-reference/portfolios/create",
+              "api-reference/designs/list",
+              "api-reference/designs/upload"
+            ]
+          },
+          {
+            "group": "Brand Management",
+            "pages": [
+              "api-reference/brands/list",
+              "api-reference/brands/create",
+              "api-reference/brands/analytics"
+            ]
+          },
+          {
+            "group": "Notifications",
+            "pages": [
+              "api-reference/notifications/list",
+              "api-reference/notifications/send",
+              "api-reference/notifications/preferences"
+            ]
+          },
+          {
+            "group": "System",
+            "pages": [
+              "api-reference/system/health",
+              "api-reference/system/status",
+              "api-reference/system/metrics"
+            ]
+          }
+        ]
        },
        {
          "tab": "Guides",
