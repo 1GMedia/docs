@@ -1,0 +1,571 @@
+---
+title: "Create Studio"
+api: "POST /studios"
+description: "Register a new tattoo studio in the platform"
+---
+
+## Overview
+
+The create studio endpoint allows studio owners to register their tattoo studio on the platform. This endpoint requires studio owner authentication and includes a verification process to ensure studio legitimacy.
+
+## Authentication
+
+<Warning>
+  This endpoint requires authentication with a user account that has `studio_owner` role or higher privileges.
+</Warning>
+
+## Request Body
+
+### Basic Information
+
+<ParamField body="name" type="string" required>
+  Studio name. Must be unique within the same city.
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  Detailed description of the studio, services, and atmosphere. Minimum 50 characters.
+</ParamField>
+
+<ParamField body="business_license" type="string" required>
+  Business license number for verification purposes.
+</ParamField>
+
+### Location Information
+
+<ParamField body="location" type="object" required>
+  Studio location details.
+  
+  <Expandable title="location object">
+    <ParamField body="address" type="string" required>
+      Full street address
+    </ParamField>
+    
+    <ParamField body="city" type="string" required>
+      City name
+    </ParamField>
+    
+    <ParamField body="state" type="string" required>
+      State or province
+    </ParamField>
+    
+    <ParamField body="postal_code" type="string" required>
+      ZIP or postal code
+    </ParamField>
+    
+    <ParamField body="country" type="string" required>
+      Country code (ISO 3166-1 alpha-2, e.g., "US", "CA")
+    </ParamField>
+    
+    <ParamField body="coordinates" type="object">
+      Geographic coordinates (auto-generated if not provided)
+      
+      <Expandable title="coordinates object">
+        <ParamField body="latitude" type="number">
+          Latitude coordinate
+        </ParamField>
+        
+        <ParamField body="longitude" type="number">
+          Longitude coordinate
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Contact Information
+
+<ParamField body="contact" type="object" required>
+  Studio contact information.
+  
+  <Expandable title="contact object">
+    <ParamField body="phone" type="string" required>
+      Primary phone number
+    </ParamField>
+    
+    <ParamField body="email" type="string" required>
+      Business email address
+    </ParamField>
+    
+    <ParamField body="website" type="string">
+      Studio website URL
+    </ParamField>
+    
+    <ParamField body="social_media" type="object">
+      Social media profiles
+      
+      <Expandable title="social_media object">
+        <ParamField body="instagram" type="string">
+          Instagram handle (without @)
+        </ParamField>
+        
+        <ParamField body="facebook" type="string">
+          Facebook page name or URL
+        </ParamField>
+        
+        <ParamField body="tiktok" type="string">
+          TikTok handle (without @)
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Studio Details
+
+<ParamField body="specialties" type="array" required>
+  Array of studio specialties. Must include at least one specialty.
+</ParamField>
+
+<ParamField body="price_range" type="string" required>
+  Studio price range category. Options: `budget`, `moderate`, `premium`, `luxury`.
+</ParamField>
+
+<ParamField body="operating_hours" type="object" required>
+  Studio operating hours.
+  
+  <Expandable title="operating_hours object">
+    <ParamField body="monday" type="object">
+      Monday hours
+      
+      <Expandable title="day object">
+        <ParamField body="open" type="string">
+          Opening time (24-hour format, e.g., "09:00")
+        </ParamField>
+        
+        <ParamField body="close" type="string">
+          Closing time (24-hour format, e.g., "18:00")
+        </ParamField>
+        
+        <ParamField body="closed" type="boolean">
+          Whether the studio is closed this day
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    
+    <ParamField body="tuesday" type="object">
+      Tuesday hours (same structure as Monday)
+    </ParamField>
+    
+    <ParamField body="wednesday" type="object">
+      Wednesday hours (same structure as Monday)
+    </ParamField>
+    
+    <ParamField body="thursday" type="object">
+      Thursday hours (same structure as Monday)
+    </ParamField>
+    
+    <ParamField body="friday" type="object">
+      Friday hours (same structure as Monday)
+    </ParamField>
+    
+    <ParamField body="saturday" type="object">
+      Saturday hours (same structure as Monday)
+    </ParamField>
+    
+    <ParamField body="sunday" type="object">
+      Sunday hours (same structure as Monday)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Additional Information
+
+<ParamField body="amenities" type="array">
+  Array of studio amenities (e.g., "parking", "wifi", "consultation_room").
+</ParamField>
+
+<ParamField body="payment_methods" type="array">
+  Accepted payment methods (e.g., "cash", "card", "digital_wallet").
+</ParamField>
+
+<ParamField body="health_certifications" type="array">
+  Health and safety certifications.
+</ParamField>
+
+<ParamField body="images" type="array">
+  Array of studio image URLs (exterior, interior, workspace).
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the studio creation was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Contains the created studio information.
+  
+  <Expandable title="data object">
+    <ResponseField name="studio" type="object">
+      Created studio details
+      
+      <Expandable title="studio object">
+        <ResponseField name="id" type="string">
+          Unique studio identifier (UUID)
+        </ResponseField>
+        
+        <ResponseField name="name" type="string">
+          Studio name
+        </ResponseField>
+        
+        <ResponseField name="slug" type="string">
+          URL-friendly studio identifier
+        </ResponseField>
+        
+        <ResponseField name="status" type="string">
+          Studio status: `pending_verification`, `active`, `suspended`
+        </ResponseField>
+        
+        <ResponseField name="verification" type="object">
+          Verification status and requirements
+          
+          <Expandable title="verification object">
+            <ResponseField name="status" type="string">
+              Verification status: `pending`, `in_review`, `approved`, `rejected`
+            </ResponseField>
+            
+            <ResponseField name="required_documents" type="array">
+              List of required documents for verification
+            </ResponseField>
+            
+            <ResponseField name="submitted_documents" type="array">
+              List of submitted documents
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        
+        <ResponseField name="owner_id" type="string">
+          Studio owner's user ID
+        </ResponseField>
+        
+        <ResponseField name="created_at" type="string">
+          Studio creation timestamp
+        </ResponseField>
+        
+        <ResponseField name="updated_at" type="string">
+          Last update timestamp
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="next_steps" type="array">
+      Array of next steps required for studio activation
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message if creation failed. Null on success.
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/studios" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Ink Masters Studio",
+    "description": "Premier tattoo studio specializing in traditional and neo-traditional artwork with over 10 years of experience serving the Los Angeles community.",
+    "business_license": "BL-2024-LA-001234",
+    "location": {
+      "address": "123 Main Street",
+      "city": "Los Angeles",
+      "state": "CA",
+      "postal_code": "90210",
+      "country": "US"
+    },
+    "contact": {
+      "phone": "+1-555-0123",
+      "email": "info@inkmasters.com",
+      "website": "https://inkmasters.com",
+      "social_media": {
+        "instagram": "inkmasters_la",
+        "facebook": "InkMastersLA"
+      }
+    },
+    "specialties": ["traditional", "neo-traditional", "blackwork"],
+    "price_range": "premium",
+    "operating_hours": {
+      "monday": {"closed": true},
+      "tuesday": {"open": "10:00", "close": "19:00"},
+      "wednesday": {"open": "10:00", "close": "19:00"},
+      "thursday": {"open": "10:00", "close": "19:00"},
+      "friday": {"open": "10:00", "close": "20:00"},
+      "saturday": {"open": "09:00", "close": "20:00"},
+      "sunday": {"open": "11:00", "close": "17:00"}
+    },
+    "amenities": ["parking", "wifi", "consultation_room", "aftercare_products"],
+    "payment_methods": ["cash", "card", "digital_wallet"],
+    "health_certifications": ["bloodborne_pathogen", "first_aid"]
+  }'
+```
+
+```javascript JavaScript
+const studioData = {
+  name: "Ink Masters Studio",
+  description: "Premier tattoo studio specializing in traditional and neo-traditional artwork with over 10 years of experience.",
+  business_license: "BL-2024-LA-001234",
+  location: {
+    address: "123 Main Street",
+    city: "Los Angeles",
+    state: "CA",
+    postal_code: "90210",
+    country: "US"
+  },
+  contact: {
+    phone: "+1-555-0123",
+    email: "info@inkmasters.com",
+    website: "https://inkmasters.com",
+    social_media: {
+      instagram: "inkmasters_la",
+      facebook: "InkMastersLA"
+    }
+  },
+  specialties: ["traditional", "neo-traditional", "blackwork"],
+  price_range: "premium",
+  operating_hours: {
+    monday: { closed: true },
+    tuesday: { open: "10:00", close: "19:00" },
+    wednesday: { open: "10:00", close: "19:00" },
+    thursday: { open: "10:00", close: "19:00" },
+    friday: { open: "10:00", close: "20:00" },
+    saturday: { open: "09:00", close: "20:00" },
+    sunday: { open: "11:00", close: "17:00" }
+  },
+  amenities: ["parking", "wifi", "consultation_room"],
+  payment_methods: ["cash", "card", "digital_wallet"]
+};
+
+const response = await fetch('https://api.tattoo.co/v1/studios', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(studioData)
+});
+
+const result = await response.json();
+if (result.success) {
+  console.log('Studio created:', result.data.studio.id);
+  console.log('Status:', result.data.studio.status);
+} else {
+  console.error('Error:', result.error);
+}
+```
+
+```python Python
+import requests
+
+url = "https://api.tattoo.co/v1/studios"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+
+studio_data = {
+    "name": "Ink Masters Studio",
+    "description": "Premier tattoo studio specializing in traditional and neo-traditional artwork.",
+    "business_license": "BL-2024-LA-001234",
+    "location": {
+        "address": "123 Main Street",
+        "city": "Los Angeles",
+        "state": "CA",
+        "postal_code": "90210",
+        "country": "US"
+    },
+    "contact": {
+        "phone": "+1-555-0123",
+        "email": "info@inkmasters.com",
+        "website": "https://inkmasters.com"
+    },
+    "specialties": ["traditional", "neo-traditional"],
+    "price_range": "premium",
+    "operating_hours": {
+        "monday": {"closed": True},
+        "tuesday": {"open": "10:00", "close": "19:00"},
+        "wednesday": {"open": "10:00", "close": "19:00"},
+        "thursday": {"open": "10:00", "close": "19:00"},
+        "friday": {"open": "10:00", "close": "20:00"},
+        "saturday": {"open": "09:00", "close": "20:00"},
+        "sunday": {"open": "11:00", "close": "17:00"}
+    }
+}
+
+response = requests.post(url, json=studio_data, headers=headers)
+result = response.json()
+
+if result['success']:
+    print(f"Studio created: {result['data']['studio']['id']}")
+    print(f"Status: {result['data']['studio']['status']}")
+else:
+    print(f"Error: {result['error']}")
+```
+
+</CodeGroup>
+
+## Success Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "studio": {
+      "id": "studio_123e4567-e89b-12d3-a456-426614174000",
+      "name": "Ink Masters Studio",
+      "slug": "ink-masters-studio-los-angeles",
+      "status": "pending_verification",
+      "verification": {
+        "status": "pending",
+        "required_documents": [
+          "business_license_copy",
+          "health_permit",
+          "insurance_certificate",
+          "owner_identification"
+        ],
+        "submitted_documents": []
+      },
+      "owner_id": "user_123e4567-e89b-12d3-a456-426614174000",
+      "created_at": "2024-01-15T10:30:00Z",
+      "updated_at": "2024-01-15T10:30:00Z"
+    },
+    "next_steps": [
+      "Upload required verification documents",
+      "Complete studio profile with images",
+      "Add artist profiles",
+      "Set up booking preferences"
+    ]
+  },
+  "error": null
+}
+```
+
+## Error Responses
+
+### 400 Bad Request - Missing Required Fields
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Missing required fields: name, description, business_license"
+}
+```
+
+### 401 Unauthorized - Invalid Authentication
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Authentication required. Please provide a valid access token."
+}
+```
+
+### 403 Forbidden - Insufficient Permissions
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Insufficient permissions. Studio owner role required."
+}
+```
+
+### 409 Conflict - Studio Already Exists
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "A studio with this name already exists in Los Angeles, CA"
+}
+```
+
+### 422 Unprocessable Entity - Invalid Data
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Invalid phone number format. Please use international format (+1-555-0123)"
+}
+```
+
+## Validation Rules
+
+### Studio Name
+- Must be unique within the same city
+- 3-100 characters
+- Cannot contain special characters except hyphens and apostrophes
+
+### Description
+- Minimum 50 characters
+- Maximum 2000 characters
+- Must be descriptive and professional
+
+### Business License
+- Required for verification
+- Must be valid and current
+- Format varies by jurisdiction
+
+### Contact Information
+- Phone number must be valid and reachable
+- Email must be valid business email
+- Website URL must be valid if provided
+
+### Operating Hours
+- Must specify hours for each day or mark as closed
+- Hours must be in 24-hour format (HH:MM)
+- Closing time must be after opening time
+
+## Verification Process
+
+### Required Documents
+1. **Business License**: Copy of current business license
+2. **Health Permit**: Local health department permit
+3. **Insurance Certificate**: Liability insurance proof
+4. **Owner Identification**: Government-issued ID
+5. **Studio Photos**: Interior and exterior photos
+
+### Verification Timeline
+- **Document Review**: 2-3 business days
+- **Background Check**: 3-5 business days
+- **Final Approval**: 1-2 business days
+- **Total Time**: 7-10 business days
+
+### Verification Status
+- **pending**: Initial submission, awaiting document upload
+- **in_review**: Documents submitted, under review
+- **approved**: Verification complete, studio active
+- **rejected**: Verification failed, requires resubmission
+
+## Studio Status
+
+- **pending_verification**: Newly created, awaiting verification
+- **active**: Verified and operational
+- **suspended**: Temporarily suspended (policy violation)
+- **inactive**: Owner-requested deactivation
+
+## Post-Creation Steps
+
+1. **Upload Documents**: Submit required verification documents
+2. **Complete Profile**: Add studio images, detailed descriptions
+3. **Add Artists**: Invite or add artist profiles
+4. **Configure Booking**: Set up booking preferences and availability
+5. **Payment Setup**: Configure payment processing
+6. **Go Live**: Activate public listing after verification
+
+## Related Endpoints
+
+- [Upload Studio Documents](/api-reference/studios/upload-documents) - Upload verification documents
+- [Update Studio](/api-reference/studios/update) - Update studio information
+- [Get Studio](/api-reference/studios/get) - Get studio details
+- [Add Studio Artist](/api-reference/studios/add-artist) - Add artist to studio
+- [Studio Verification Status](/api-reference/studios/verification-status) - Check verification status
+
+## Best Practices
+
+1. **Complete Information**: Provide comprehensive and accurate information
+2. **Professional Images**: Use high-quality photos of studio interior and exterior
+3. **Accurate Hours**: Keep operating hours current and accurate
+4. **Quick Verification**: Upload all required documents promptly
+5. **Regular Updates**: Keep studio information updated as changes occur

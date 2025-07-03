@@ -1,191 +1,557 @@
-# Quick Start Guide
+---
+title: "Quickstart Guide"
+description: "Get up and running with the Tattoo API in minutes"
+---
 
-Get up and running with the Tattoo API in just a few minutes. This guide will walk you through making your first API request and understanding the basic concepts.
+## Welcome to the Tattoo API
 
-## Step 1: Get Your API Key
+The Tattoo API is a comprehensive platform for managing tattoo studios, artists, bookings, and client relationships. This quickstart guide will help you make your first API calls and understand the core concepts.
 
-<Steps>
-  <Step title="Sign Up">
-    Create an account at [tattoo.co/developers](https://tattoo.co/developers)
-  </Step>
-  <Step title="Verify Email">
-    Check your email and verify your account
-  </Step>
-  <Step title="Generate API Key">
-    Navigate to your dashboard and generate your first API key
-  </Step>
-  <Step title="Copy & Store">
-    Copy your API key and store it securely (you'll need it for all requests)
-  </Step>
-</Steps>
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/authentication">
+    Learn how to authenticate and secure your API requests
+  </Card>
+  <Card title="Core Concepts" icon="lightbulb" href="/concepts/studios">
+    Understand studios, artists, bookings, and clients
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference">
+    Explore all available endpoints and their parameters
+  </Card>
+  <Card title="Guides" icon="book" href="/guides">
+    Follow step-by-step tutorials for common use cases
+  </Card>
+</CardGroup>
 
-<Warning>
-**Keep your API key secure!** Never expose it in client-side code or commit it to version control. Use environment variables in production.
-</Warning>
+## Prerequisites
 
-## Step 2: Make Your First Request
+Before you begin, make sure you have:
 
-Let's start by fetching a list of tattoo studios. Here's how to do it in different programming languages:
+- A Tattoo API account (sign up at [tattoo.co](https://tattoo.co))
+- Your API credentials (API key or OAuth tokens)
+- A development environment with HTTP client capabilities
+
+## Step 1: Check API Health
+
+First, let's verify that the API is running and accessible:
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://api.tattoo.co/v1/studios" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json"
+curl -X GET "https://api.tattoo.co/v1/health"
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://api.tattoo.co/v1/studios', {
-  method: 'GET',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  }
-});
-
-const data = await response.json();
-console.log(data);
+const response = await fetch('https://api.tattoo.co/v1/health');
+const health = await response.json();
+console.log('API Status:', health.status);
 ```
 
 ```python Python
 import requests
 
-headers = {
-    'Authorization': 'Bearer YOUR_API_KEY',
-    'Content-Type': 'application/json'
-}
-
-response = requests.get('https://api.tattoo.co/v1/studios', headers=headers)
-data = response.json()
-print(data)
-```
-
-```php PHP
-<?php
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.tattoo.co/v1/studios',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: Bearer YOUR_API_KEY',
-    'Content-Type: application/json'
-  ),
-));
-
-$response = curl_exec($curl);
-curl_close($curl);
-
-$data = json_decode($response, true);
-print_r($data);
-?>
+response = requests.get('https://api.tattoo.co/v1/health')
+health = response.json()
+print(f"API Status: {health['status']}")
 ```
 
 </CodeGroup>
 
-## Step 3: Understanding the Response
+You should receive a response indicating the API is healthy:
 
-The API returns a consistent response format:
-
-```json Example Response
+```json
 {
-  "success": true,
-  "data": [
-    {
-      "id": "studio_123",
-      "name": "Ink Masters Studio",
-      "description": "Premier tattoo studio in downtown LA",
-      "address": "123 Main St, Los Angeles, CA 90210",
-      "city": "Los Angeles",
-      "state": "CA",
-      "rating": 4.8,
-      "review_count": 127,
-      "specialties": ["traditional", "realism", "watercolor"],
-      "price_range": "$$$",
-      "verified": true,
-      "images": [
-        "https://cdn.tattoo.co/studios/studio_123/image1.jpg"
-      ]
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 20,
-    "total": 150,
-    "totalPages": 8,
-    "hasNext": true,
-    "hasPrev": false
-  },
-  "error": null
+  "status": "healthy",
+  "version": "1.0.0",
+  "timestamp": "2024-01-15T10:30:00Z"
 }
 ```
 
-## Step 4: Filter and Search
+## Step 2: Authenticate
 
-You can refine your results using query parameters:
+The Tattoo API uses Bearer token authentication. You can obtain tokens through user registration/login or by using API keys.
+
+### Option A: User Registration
 
 <CodeGroup>
 
-```bash Search by Location
-curl -X GET "https://api.tattoo.co/v1/studios?city=Los Angeles&state=CA" \
-  -H "Authorization: Bearer YOUR_API_KEY"
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "developer@example.com",
+    "password": "SecurePassword123!",
+    "full_name": "John Developer",
+    "phone": "+1-555-0123",
+    "role": "studio_owner"
+  }'
 ```
 
-```bash Filter by Rating
-curl -X GET "https://api.tattoo.co/v1/studios?rating=4.5&verified=true" \
-  -H "Authorization: Bearer YOUR_API_KEY"
+```javascript JavaScript
+const registerUser = async () => {
+  const response = await fetch('https://api.tattoo.co/v1/auth/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: 'developer@example.com',
+      password: 'SecurePassword123!',
+      full_name: 'John Developer',
+      phone: '+1-555-0123',
+      role: 'studio_owner'
+    })
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    // Store the access token
+    localStorage.setItem('access_token', data.data.tokens.access_token);
+    console.log('Registration successful!');
+    return data.data.tokens.access_token;
+  } else {
+    console.error('Registration failed:', data.error);
+  }
+};
 ```
 
-```bash Geographic Search
-curl -X GET "https://api.tattoo.co/v1/studios?latitude=34.0522&longitude=-118.2437&radius=10" \
-  -H "Authorization: Bearer YOUR_API_KEY"
+```python Python
+import requests
+
+def register_user():
+    response = requests.post(
+        'https://api.tattoo.co/v1/auth/register',
+        json={
+            'email': 'developer@example.com',
+            'password': 'SecurePassword123!',
+            'full_name': 'John Developer',
+            'phone': '+1-555-0123',
+            'role': 'studio_owner'
+        }
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        access_token = data['data']['tokens']['access_token']
+        print('Registration successful!')
+        return access_token
+    else:
+        print(f"Registration failed: {data['error']}")
+        return None
 ```
 
 </CodeGroup>
 
-## Step 5: Working with Artists
+### Option B: User Login
 
-Now let's fetch artists from a specific studio:
+If you already have an account:
 
-```javascript Get Studio Artists
-const studioId = "studio_123";
-const response = await fetch(`https://api.tattoo.co/v1/artists?studio_id=${studioId}`, {
-  headers: {
-    'Authorization': 'Bearer YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  }
-});
+<CodeGroup>
 
-const artists = await response.json();
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "developer@example.com",
+    "password": "SecurePassword123!"
+  }'
 ```
+
+```javascript JavaScript
+const loginUser = async () => {
+  const response = await fetch('https://api.tattoo.co/v1/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: 'developer@example.com',
+      password: 'SecurePassword123!'
+    })
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    localStorage.setItem('access_token', data.data.tokens.access_token);
+    return data.data.tokens.access_token;
+  }
+};
+```
+
+```python Python
+def login_user():
+    response = requests.post(
+        'https://api.tattoo.co/v1/auth/login',
+        json={
+            'email': 'developer@example.com',
+            'password': 'SecurePassword123!'
+        }
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        return data['data']['tokens']['access_token']
+    return None
+```
+
+</CodeGroup>
+
+## Step 3: Make Your First API Call
+
+Now let's search for tattoo studios using your access token:
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.tattoo.co/v1/studios?limit=5" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+```javascript JavaScript
+const getStudios = async (accessToken) => {
+  const response = await fetch('https://api.tattoo.co/v1/studios?limit=5', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    console.log(`Found ${data.data.studios.length} studios:`);
+    data.data.studios.forEach(studio => {
+      console.log(`- ${studio.name} in ${studio.location.city}, ${studio.location.state}`);
+    });
+  }
+  
+  return data;
+};
+
+// Usage
+const token = localStorage.getItem('access_token');
+getStudios(token);
+```
+
+```python Python
+def get_studios(access_token):
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.get(
+        'https://api.tattoo.co/v1/studios',
+        headers=headers,
+        params={'limit': 5}
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        print(f"Found {len(data['data']['studios'])} studios:")
+        for studio in data['data']['studios']:
+            location = studio['location']
+            print(f"- {studio['name']} in {location['city']}, {location['state']}")
+    
+    return data
+
+# Usage
+token = login_user()  # or register_user()
+if token:
+    get_studios(token)
+```
+
+</CodeGroup>
+
+## Step 4: Create a Studio
+
+Let's create a new tattoo studio:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/studios" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Ink Masters Studio",
+    "description": "Premier tattoo studio specializing in traditional and neo-traditional work",
+    "location": {
+      "address": "123 Main Street",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip_code": "90210",
+      "country": "US"
+    },
+    "contact": {
+      "phone": "+1-555-0199",
+      "email": "info@inkmasters.com",
+      "website": "https://inkmasters.com"
+    },
+    "specialties": ["traditional", "neo-traditional", "blackwork"],
+    "price_range": "premium"
+  }'
+```
+
+```javascript JavaScript
+const createStudio = async (accessToken) => {
+  const studioData = {
+    name: 'Ink Masters Studio',
+    description: 'Premier tattoo studio specializing in traditional and neo-traditional work',
+    location: {
+      address: '123 Main Street',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip_code: '90210',
+      country: 'US'
+    },
+    contact: {
+      phone: '+1-555-0199',
+      email: 'info@inkmasters.com',
+      website: 'https://inkmasters.com'
+    },
+    specialties: ['traditional', 'neo-traditional', 'blackwork'],
+    price_range: 'premium'
+  };
+  
+  const response = await fetch('https://api.tattoo.co/v1/studios', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(studioData)
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    console.log('Studio created successfully!');
+    console.log('Studio ID:', data.data.studio.id);
+    return data.data.studio;
+  } else {
+    console.error('Failed to create studio:', data.error);
+  }
+};
+```
+
+```python Python
+def create_studio(access_token):
+    studio_data = {
+        'name': 'Ink Masters Studio',
+        'description': 'Premier tattoo studio specializing in traditional and neo-traditional work',
+        'location': {
+            'address': '123 Main Street',
+            'city': 'Los Angeles',
+            'state': 'CA',
+            'zip_code': '90210',
+            'country': 'US'
+        },
+        'contact': {
+            'phone': '+1-555-0199',
+            'email': 'info@inkmasters.com',
+            'website': 'https://inkmasters.com'
+        },
+        'specialties': ['traditional', 'neo-traditional', 'blackwork'],
+        'price_range': 'premium'
+    }
+    
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.post(
+        'https://api.tattoo.co/v1/studios',
+        headers=headers,
+        json=studio_data
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        print('Studio created successfully!')
+        print(f"Studio ID: {data['data']['studio']['id']}")
+        return data['data']['studio']
+    else:
+        print(f"Failed to create studio: {data['error']}")
+        return None
+```
+
+</CodeGroup>
+
+## Step 5: Search for Content
+
+Use the universal search to find studios, artists, or designs:
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.tattoo.co/v1/search?q=traditional%20tattoo%20los%20angeles&type=studios&limit=3" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+```javascript JavaScript
+const searchContent = async (accessToken, query) => {
+  const params = new URLSearchParams({
+    q: query,
+    type: 'studios',
+    limit: '3'
+  });
+  
+  const response = await fetch(`https://api.tattoo.co/v1/search?${params}`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    console.log(`Search results for "${query}":`);
+    data.data.results.forEach(result => {
+      console.log(`- ${result.title} (${result.type}) - Rating: ${result.rating?.average || 'N/A'}`);
+    });
+  }
+  
+  return data;
+};
+
+// Usage
+searchContent(accessToken, 'traditional tattoo los angeles');
+```
+
+```python Python
+def search_content(access_token, query):
+    headers = {'Authorization': f'Bearer {access_token}'}
+    params = {
+        'q': query,
+        'type': 'studios',
+        'limit': 3
+    }
+    
+    response = requests.get(
+        'https://api.tattoo.co/v1/search',
+        headers=headers,
+        params=params
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        print(f'Search results for "{query}":')
+        for result in data['data']['results']:
+            rating = result.get('rating', {}).get('average', 'N/A')
+            print(f"- {result['title']} ({result['type']}) - Rating: {rating}")
+    
+    return data
+
+# Usage
+search_content(token, 'traditional tattoo los angeles')
+```
+
+</CodeGroup>
 
 ## Step 6: Create a Booking
 
-Here's how to create a new booking:
+Now let's create a tattoo appointment booking:
 
-```javascript Create Booking
-const bookingData = {
-  artist_id: "artist_456",
-  client_id: "client_789",
-  appointment_date: "2025-02-01T14:00:00Z",
-  duration_hours: 3,
-  description: "Dragon sleeve tattoo",
-  placement: "Right arm",
-  estimated_price: 800
-};
+<CodeGroup>
 
-const response = await fetch('https://api.tattoo.co/v1/bookings', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(bookingData)
-});
-
-const booking = await response.json();
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/bookings" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "artist_id": "artist_123e4567-e89b-12d3-a456-426614174000",
+    "studio_id": "studio_456e7890-e89b-12d3-a456-426614174000",
+    "service_type": "tattoo_session",
+    "appointment_date": "2024-02-15",
+    "appointment_time": "14:00",
+    "duration_hours": 3,
+    "tattoo_details": {
+      "style": "traditional",
+      "size": "medium",
+      "placement": "forearm",
+      "color_preference": "color",
+      "description": "Traditional rose with banner"
+    }
+  }'
 ```
+
+```javascript JavaScript
+const createBooking = async (accessToken, artistId, studioId) => {
+  const bookingData = {
+    artist_id: artistId,
+    studio_id: studioId,
+    service_type: 'tattoo_session',
+    appointment_date: '2024-02-15',
+    appointment_time: '14:00',
+    duration_hours: 3,
+    tattoo_details: {
+      style: 'traditional',
+      size: 'medium',
+      placement: 'forearm',
+      color_preference: 'color',
+      description: 'Traditional rose with banner'
+    }
+  };
+  
+  const response = await fetch('https://api.tattoo.co/v1/bookings', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookingData)
+  });
+  
+  const data = await response.json();
+  
+  if (data.success) {
+    console.log('Booking created successfully!');
+    console.log('Booking ID:', data.data.booking.id);
+    console.log('Status:', data.data.booking.status);
+    return data.data.booking;
+  } else {
+    console.error('Failed to create booking:', data.error);
+  }
+};
+```
+
+```python Python
+def create_booking(access_token, artist_id, studio_id):
+    booking_data = {
+        'artist_id': artist_id,
+        'studio_id': studio_id,
+        'service_type': 'tattoo_session',
+        'appointment_date': '2024-02-15',
+        'appointment_time': '14:00',
+        'duration_hours': 3,
+        'tattoo_details': {
+            'style': 'traditional',
+            'size': 'medium',
+            'placement': 'forearm',
+            'color_preference': 'color',
+            'description': 'Traditional rose with banner'
+        }
+    }
+    
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.post(
+        'https://api.tattoo.co/v1/bookings',
+        headers=headers,
+        json=booking_data
+    )
+    
+    data = response.json()
+    
+    if data['success']:
+        print('Booking created successfully!')
+        print(f"Booking ID: {data['data']['booking']['id']}")
+        print(f"Status: {data['data']['booking']['status']}")
+        return data['data']['booking']
+    else:
+        print(f"Failed to create booking: {data['error']}")
+        return None
+```
+
+</CodeGroup>
 
 ## Common Parameters
 
@@ -237,60 +603,164 @@ Include the `X-RateLimit-*` headers in your monitoring to track usage and avoid 
 
 ## Next Steps
 
-Now that you've made your first requests, explore these resources:
+Congratulations! You've successfully:
+- ✅ Checked API health
+- ✅ Authenticated with the API
+- ✅ Searched for tattoo studios
+- ✅ Created a new studio
+- ✅ Performed content search
+- ✅ Created a booking
+
+### What's Next?
+
+Explore these key areas to build your tattoo platform:
 
 <CardGroup cols={2}>
-  <Card
-    title="API Reference"
-    icon="book"
-    href="/api-reference"
-  >
+  <Card title="Core Concepts" icon="book" href="/concepts">
+    Learn about studios, artists, clients, and bookings
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference">
     Complete documentation for all endpoints
   </Card>
-  <Card
-    title="Authentication Guide"
-    icon="key"
-    href="/authentication"
-  >
-    Learn about JWT tokens and API key management
+  <Card title="Authentication" icon="shield" href="/api-reference/authentication">
+    Secure your API integration
   </Card>
-  <Card
-    title="Studio Management"
-    icon="store"
-    href="/guides/studio-management"
-  >
-    Build studio management applications
-  </Card>
-  <Card
-    title="Booking Workflows"
-    icon="calendar"
-    href="/guides/booking-workflow"
-  >
-    Implement appointment booking systems
+  <Card title="Webhooks" icon="webhook" href="/guides/webhooks">
+    Real-time event notifications
   </Card>
 </CardGroup>
 
+### Common Use Cases
+
+- **Studio Management**: Create and manage tattoo studio profiles
+- **Artist Portfolios**: Showcase artist work and specialties
+- **Booking System**: Handle appointment scheduling and management
+- **Client Experience**: Manage client profiles and preferences
+- **Search & Discovery**: Help users find studios and artists
+- **Reviews & Ratings**: Build trust through community feedback
+
+### Best Practices
+
+- Always handle errors gracefully
+- Implement proper rate limiting
+- Use webhooks for real-time updates
+- Cache frequently accessed data
+- Validate all user inputs
+- Follow security best practices
+
+### Support
+
+Need help? Check out these resources:
+
+- [API Status](https://status.tattoo.co) - Current API status
+- [GitHub Issues](https://github.com/tattoo-api/issues) - Report bugs
+- [Community Discord](https://discord.gg/tattoo-api) - Get help from the community
+- [Support Email](mailto:support@tattoo.co) - Direct support
+
 ## SDK Libraries
 
-We provide official SDKs to make integration even easier:
+We provide official SDKs to make integration easier:
 
-<CardGroup cols={3}>
-  <Card title="JavaScript/TypeScript" icon="js">
+<CardGroup cols={2}>
+  <Card title="JavaScript/Node.js" icon="js">
     ```bash
-    npm install @tattoo-co/sdk
+    npm install @tattoo-api/sdk
     ```
   </Card>
   <Card title="Python" icon="python">
     ```bash
-    pip install tattoo-co
+    pip install tattoo-api
     ```
   </Card>
   <Card title="PHP" icon="php">
     ```bash
-    composer require tattoo-co/sdk
+    composer require tattoo-api/php-sdk
+    ```
+  </Card>
+  <Card title="Ruby" icon="gem">
+    ```bash
+    gem install tattoo_api
     ```
   </Card>
 </CardGroup>
+
+### JavaScript SDK Example
+
+```javascript
+import { TattooAPI } from '@tattoo-api/sdk';
+
+const client = new TattooAPI({
+  apiKey: 'your-api-key',
+  environment: 'production' // or 'sandbox'
+});
+
+// Authentication
+const auth = await client.auth.login({
+  email: 'user@example.com',
+  password: 'secure_password'
+});
+
+// Search studios
+const studios = await client.search.studios({
+  query: 'traditional tattoo',
+  location: 'Los Angeles, CA',
+  limit: 10
+});
+
+// Create a booking
+const booking = await client.bookings.create({
+  artistId: 'artist_123e4567-e89b-12d3-a456-426614174000',
+  studioId: 'studio_456e7890-e89b-12d3-a456-426614174000',
+  serviceType: 'tattoo_session',
+  appointmentDate: '2024-02-15',
+  appointmentTime: '14:00',
+  durationHours: 3,
+  tattooDetails: {
+    style: 'traditional',
+    placement: 'forearm',
+    description: 'Traditional rose design'
+  }
+});
+```
+
+### Python SDK Example
+
+```python
+from tattoo_api import TattooAPI
+
+client = TattooAPI(
+    api_key='your-api-key',
+    environment='production'  # or 'sandbox'
+)
+
+# Authentication
+auth = client.auth.login(
+    email='user@example.com',
+    password='secure_password'
+)
+
+# Search studios
+studios = client.search.studios(
+    query='traditional tattoo',
+    location='Los Angeles, CA',
+    limit=10
+)
+
+# Create a booking
+booking = client.bookings.create(
+    artist_id='artist_123e4567-e89b-12d3-a456-426614174000',
+    studio_id='studio_456e7890-e89b-12d3-a456-426614174000',
+    service_type='tattoo_session',
+    appointment_date='2024-02-15',
+    appointment_time='14:00',
+    duration_hours=3,
+    tattoo_details={
+        'style': 'traditional',
+        'placement': 'forearm',
+        'description': 'Traditional rose design'
+    }
+)
+```
 
 <Note>
 **Need help?** Join our [Discord community](https://discord.gg/tattoo-co) or reach out to [support](mailto:api-support@tattoo.co).

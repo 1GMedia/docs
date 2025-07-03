@@ -1,0 +1,196 @@
+---
+title: "Clients"
+description: "Understanding client management and customer experience features in the Tattoo API"
+---
+
+## Overview
+
+Clients are the customers who book tattoo services through the platform. The Tattoo API provides comprehensive client management tools that help studios and artists deliver exceptional customer experiences, from initial discovery through post-service follow-up.
+
+## Key Features
+
+### Client Profiles
+- **Personal Information**: Contact details, preferences, and communication history
+- **Tattoo History**: Record of previous tattoos, artists, and studios
+- **Health Information**: Allergies, medical conditions, and consent forms
+- **Preferences**: Preferred styles, artists, and booking preferences
+
+### Booking Management
+- **Service Discovery**: Browse studios, artists, and available services
+- **Appointment Scheduling**: Real-time booking with calendar integration
+- **Consultation Requests**: Separate flow for design consultations
+- **Modification Handling**: Reschedule, cancel, or modify existing bookings
+
+### Communication Tools
+- **Direct Messaging**: Secure communication with artists and studios
+- **Notification Preferences**: Customizable alerts and reminders
+- **Review System**: Rate and review completed services
+- **Support Channels**: Help desk and customer service integration
+
+## Client Journey
+
+### Discovery Phase
+1. **Search and Browse**: Find studios and artists by location, style, or rating
+2. **Portfolio Review**: Explore artist portfolios and previous work
+3. **Comparison**: Compare pricing, availability, and reviews
+4. **Initial Contact**: Send inquiries or consultation requests
+
+### Booking Phase
+1. **Consultation**: Discuss design ideas and requirements
+2. **Quote Review**: Receive pricing and time estimates
+3. **Scheduling**: Select preferred dates and times
+4. **Confirmation**: Finalize booking with deposit payment
+
+### Service Phase
+1. **Preparation**: Receive pre-appointment instructions
+2. **Check-in**: Arrive at studio and complete final paperwork
+3. **Service Delivery**: Tattoo session with real-time updates
+4. **Completion**: Final review and aftercare instructions
+
+### Post-Service Phase
+1. **Aftercare**: Follow healing instructions and guidelines
+2. **Follow-up**: Check-in calls or messages from artist
+3. **Review**: Rate and review the experience
+4. **Future Bookings**: Schedule touch-ups or additional work
+
+## Client Types
+
+### First-Time Clients
+- **Education**: Comprehensive guides about the tattoo process
+- **Consultation Focus**: Extra time for design discussion and questions
+- **Comfort Measures**: Additional support and reassurance
+- **Aftercare Emphasis**: Detailed healing instructions and follow-up
+
+### Returning Clients
+- **Streamlined Booking**: Faster process with saved preferences
+- **Artist Relationships**: Continued work with preferred artists
+- **Loyalty Benefits**: Discounts, priority booking, or special offers
+- **Portfolio Building**: Coordinated multi-session projects
+
+### Collectors
+- **Project Management**: Large-scale, multi-session tattoo projects
+- **Artist Collaboration**: Work with multiple artists for complex pieces
+- **Timeline Coordination**: Long-term scheduling and planning
+- **Documentation**: Detailed progress tracking and photography
+
+## Privacy and Security
+
+### Data Protection
+- **Personal Information**: Secure storage of contact and health data
+- **Payment Security**: PCI-compliant payment processing
+- **Medical Privacy**: HIPAA-compliant health information handling
+- **Communication Encryption**: Secure messaging and file sharing
+
+### Consent Management
+- **Photo Permissions**: Control over portfolio image usage
+- **Marketing Preferences**: Opt-in/opt-out for promotional communications
+- **Data Sharing**: Granular control over information sharing
+- **Right to Deletion**: Complete data removal upon request
+
+## Preferences and Customization
+
+### Booking Preferences
+- **Preferred Artists**: Saved list of favorite artists
+- **Style Interests**: Tattoo styles and themes of interest
+- **Scheduling**: Preferred days, times, and advance notice
+- **Location**: Preferred studios and maximum travel distance
+
+### Communication Preferences
+- **Notification Types**: Booking confirmations, reminders, updates
+- **Delivery Methods**: Email, SMS, push notifications, or in-app
+- **Frequency**: How often to receive promotional content
+- **Language**: Preferred language for all communications
+
+## Health and Safety
+
+### Medical Information
+- **Allergies**: Known allergies to inks, metals, or cleaning products
+- **Medications**: Current medications that might affect healing
+- **Medical Conditions**: Conditions that impact tattoo safety
+- **Previous Reactions**: History of adverse reactions to tattoos
+
+### Consent Forms
+- **Digital Signatures**: Electronic consent form completion
+- **Age Verification**: Proof of age for legal compliance
+- **Health Declarations**: Medical history and current health status
+- **Photo Permissions**: Consent for before/after photography
+
+## Best Practices
+
+### Profile Completion
+- **Accurate Information**: Keep contact details and preferences current
+- **Health Transparency**: Provide complete medical information
+- **Clear Communication**: Express preferences and concerns clearly
+- **Regular Updates**: Update profile after life changes
+
+### Booking Etiquette
+- **Advance Planning**: Book well in advance for popular artists
+- **Punctuality**: Arrive on time for all appointments
+- **Preparation**: Follow pre-appointment instructions
+- **Respect**: Treat artists and staff professionally
+
+### Aftercare Compliance
+- **Follow Instructions**: Adhere to provided aftercare guidelines
+- **Monitor Healing**: Watch for signs of infection or complications
+- **Communication**: Report any concerns promptly
+- **Patience**: Allow proper healing time before touch-ups
+
+## Analytics and Insights
+
+### Client Behavior
+- **Booking Patterns**: Frequency and timing of appointments
+- **Style Preferences**: Most requested tattoo styles and themes
+- **Artist Loyalty**: Repeat bookings with same artists
+- **Satisfaction Metrics**: Review scores and feedback analysis
+
+### Market Trends
+- **Popular Styles**: Trending tattoo designs and techniques
+- **Seasonal Patterns**: Booking volume throughout the year
+- **Price Sensitivity**: Response to pricing changes
+- **Geographic Preferences**: Location-based booking patterns
+
+## Related Endpoints
+
+- [List Clients](/api-reference/clients/list) - Browse client database
+- [Get Client](/api-reference/clients/get) - Retrieve client details
+- [Create Client](/api-reference/clients/create) - Register new client
+- [Update Client](/api-reference/clients/update) - Modify client profile
+- [Client Bookings](/api-reference/bookings/list) - Client booking history
+- [Client Reviews](/api-reference/reviews/list) - Client review history
+
+## Integration Examples
+
+### Client Registration
+```javascript
+const client = await tattooAPI.clients.create({
+  email: 'client@example.com',
+  full_name: 'John Smith',
+  phone: '+1-555-0123',
+  date_of_birth: '1990-05-15',
+  preferences: {
+    styles: ['traditional', 'neo-traditional'],
+    max_travel_distance: 25,
+    preferred_days: ['saturday', 'sunday']
+  }
+});
+```
+
+### Booking History Retrieval
+```javascript
+const bookings = await tattooAPI.bookings.list({
+  client_id: 'client-uuid',
+  status: ['completed', 'upcoming'],
+  include: ['artist', 'studio', 'reviews']
+});
+```
+
+### Preference Updates
+```javascript
+const updatedClient = await tattooAPI.clients.update('client-uuid', {
+  preferences: {
+    notification_methods: ['email', 'sms'],
+    marketing_opt_in: false,
+    preferred_artists: ['artist-1-uuid', 'artist-2-uuid']
+  }
+});
+```

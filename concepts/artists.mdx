@@ -1,0 +1,136 @@
+---
+title: "Artists"
+description: "Understanding artist management and portfolio features in the Tattoo API"
+---
+
+## Overview
+
+Artists are the creative professionals who perform tattoo services at studios. The Tattoo API provides comprehensive artist management capabilities, including profile management, portfolio showcasing, booking coordination, and performance analytics.
+
+## Key Features
+
+### Artist Profiles
+- **Personal Information**: Name, bio, contact details, and professional credentials
+- **Specialties**: Tattoo styles and techniques the artist specializes in
+- **Experience Level**: Years of experience and skill ratings
+- **Availability**: Working hours, booking preferences, and schedule management
+
+### Portfolio Management
+- **Image Galleries**: High-quality photos of completed work
+- **Style Categories**: Organization by tattoo styles (traditional, realism, geometric, etc.)
+- **Client Testimonials**: Reviews and feedback from previous clients
+- **Before/After Showcases**: Transformation galleries for cover-ups and touch-ups
+
+### Booking Integration
+- **Calendar Management**: Real-time availability and scheduling
+- **Service Offerings**: Different tattoo services with pricing
+- **Consultation Booking**: Separate booking flow for consultations
+- **Waitlist Management**: Handle cancellations and last-minute availability
+
+## Artist Roles and Permissions
+
+### Independent Artists
+- Manage their own profile and portfolio
+- Set their own pricing and availability
+- Handle direct client communications
+- Access to personal analytics and earnings
+
+### Studio-Affiliated Artists
+- Profile managed in coordination with studio
+- Studio-wide booking system integration
+- Shared client database access
+- Studio branding and marketing support
+
+### Guest Artists
+- Temporary studio affiliations
+- Limited-time availability windows
+- Special event and convention bookings
+- Cross-studio collaboration features
+
+## How It Works
+
+### Artist Onboarding
+1. **Registration**: Create artist account with basic information
+2. **Verification**: Submit credentials and portfolio for review
+3. **Profile Setup**: Complete detailed profile with specialties and pricing
+4. **Studio Association**: Link to studio(s) or operate independently
+5. **Go Live**: Activate booking availability and public profile
+
+### Portfolio Building
+1. **Image Upload**: High-resolution photos with proper lighting
+2. **Categorization**: Tag images by style, size, and body placement
+3. **Description**: Add context, inspiration, and technical details
+4. **Client Consent**: Ensure proper permissions for image usage
+5. **SEO Optimization**: Keywords and tags for discoverability
+
+### Booking Management
+1. **Availability Setting**: Define working hours and booking windows
+2. **Service Configuration**: Set up different tattoo services and pricing
+3. **Client Interaction**: Handle inquiries, consultations, and bookings
+4. **Schedule Coordination**: Manage appointments and studio resources
+5. **Follow-up**: Post-service care instructions and review requests
+
+## Best Practices
+
+### Profile Optimization
+- **Professional Photos**: High-quality headshots and workspace images
+- **Detailed Bio**: Personal story, artistic journey, and philosophy
+- **Specialty Focus**: Clear communication of preferred styles and techniques
+- **Regular Updates**: Keep portfolio and availability current
+
+### Client Communication
+- **Response Time**: Quick replies to inquiries and booking requests
+- **Clear Pricing**: Transparent pricing structure and payment terms
+- **Consultation Process**: Thorough design discussions before booking
+- **Aftercare Support**: Comprehensive healing instructions and follow-up
+
+### Portfolio Management
+- **Quality Control**: Only showcase best work with proper lighting
+- **Diversity**: Show range of styles, sizes, and placements
+- **Fresh Content**: Regular updates with recent work
+- **Client Stories**: Include context and client satisfaction stories
+
+## Analytics and Insights
+
+### Performance Metrics
+- **Booking Conversion**: Inquiry to booking conversion rates
+- **Client Retention**: Repeat client percentages and referral rates
+- **Revenue Tracking**: Earnings analysis and growth trends
+- **Portfolio Engagement**: Most viewed and liked portfolio pieces
+
+### Growth Opportunities
+- **Skill Development**: Identify popular styles to learn
+- **Market Demand**: Understand local client preferences
+- **Pricing Optimization**: Data-driven pricing adjustments
+- **Marketing Insights**: Effective promotion strategies
+
+## Related Endpoints
+
+- [List Artists](/api-reference/artists/list) - Browse and search artists
+- [Get Artist](/api-reference/artists/get) - Retrieve artist details
+- [Create Artist](/api-reference/artists/create) - Register new artist
+- [Update Artist](/api-reference/artists/update) - Modify artist profile
+- [Artist Analytics](/api-reference/analytics/artist) - Performance metrics
+- [Portfolio Management](/api-reference/portfolios/list) - Portfolio operations
+
+## Integration Examples
+
+### Finding Artists by Style
+```javascript
+const artists = await tattooAPI.artists.list({
+  specialties: ['realism', 'portrait'],
+  location: { city: 'Los Angeles', radius: 25 },
+  availability: { date: '2024-02-15', duration: 4 }
+});
+```
+
+### Booking with Preferred Artist
+```javascript
+const booking = await tattooAPI.bookings.create({
+  artist_id: 'artist-uuid',
+  service_type: 'custom_tattoo',
+  preferred_date: '2024-02-20',
+  estimated_duration: 3,
+  design_description: 'Small geometric mandala on forearm'
+});
+```

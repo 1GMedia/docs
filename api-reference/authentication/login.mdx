@@ -1,0 +1,382 @@
+---
+title: "Login User"
+api: "POST /auth/login"
+description: "Authenticate a user and obtain access tokens"
+---
+
+## Overview
+
+The login endpoint authenticates existing users and provides access tokens for API requests. It supports multiple authentication methods including email/password and social login.
+
+## Authentication
+
+This endpoint does not require authentication. It's used to obtain authentication tokens.
+
+## Request Body
+
+<ParamField body="email" type="string" required>
+  User's registered email address.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  User's password.
+</ParamField>
+
+<ParamField body="remember_me" type="boolean" default="false">
+  If true, extends the refresh token expiration time.
+</ParamField>
+
+<ParamField body="device_info" type="object">
+  Optional device information for security tracking.
+  
+  <Expandable title="device_info object">
+    <ParamField body="device_type" type="string">
+      Type of device: `mobile`, `desktop`, `tablet`
+    </ParamField>
+    
+    <ParamField body="device_name" type="string">
+      Device name or identifier
+    </ParamField>
+    
+    <ParamField body="app_version" type="string">
+      Application version
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the login was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Contains user information and authentication tokens.
+  
+  <Expandable title="data object">
+    <ResponseField name="user" type="object">
+      User profile information
+      
+      <Expandable title="user object">
+        <ResponseField name="id" type="string">
+          Unique user identifier (UUID)
+        </ResponseField>
+        
+        <ResponseField name="email" type="string">
+          User's email address
+        </ResponseField>
+        
+        <ResponseField name="full_name" type="string">
+          User's full name
+        </ResponseField>
+        
+        <ResponseField name="role" type="string">
+          User's role in the system
+        </ResponseField>
+        
+        <ResponseField name="email_verified" type="boolean">
+          Whether the user's email is verified
+        </ResponseField>
+        
+        <ResponseField name="profile_complete" type="boolean">
+          Whether the user has completed their profile
+        </ResponseField>
+        
+        <ResponseField name="last_login" type="string">
+          Timestamp of last login
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="tokens" type="object">
+      Authentication tokens
+      
+      <Expandable title="tokens object">
+        <ResponseField name="access_token" type="string">
+          JWT access token for API requests
+        </ResponseField>
+        
+        <ResponseField name="refresh_token" type="string">
+          Refresh token for obtaining new access tokens
+        </ResponseField>
+        
+        <ResponseField name="expires_in" type="number">
+          Access token expiration time in seconds
+        </ResponseField>
+        
+        <ResponseField name="token_type" type="string">
+          Token type, typically "Bearer"
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="permissions" type="array">
+      Array of user permissions based on role
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message if login failed. Null on success.
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.tattoo.co/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "securePassword123",
+    "remember_me": true,
+    "device_info": {
+      "device_type": "mobile",
+      "device_name": "iPhone 15",
+      "app_version": "1.2.0"
+    }
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.tattoo.co/v1/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    email: 'john.doe@example.com',
+    password: 'securePassword123',
+    remember_me: true,
+    device_info: {
+      device_type: 'desktop',
+      device_name: 'Chrome Browser',
+      app_version: '1.2.0'
+    }
+  })
+});
+
+const data = await response.json();
+
+if (data.success) {
+  // Store tokens securely
+  localStorage.setItem('access_token', data.data.tokens.access_token);
+  localStorage.setItem('refresh_token', data.data.tokens.refresh_token);
+}
+```
+
+```python Python
+import requests
+
+url = "https://api.tattoo.co/v1/auth/login"
+payload = {
+    "email": "john.doe@example.com",
+    "password": "securePassword123",
+    "remember_me": True,
+    "device_info": {
+        "device_type": "desktop",
+        "device_name": "Python Client",
+        "app_version": "1.0.0"
+    }
+}
+
+response = requests.post(url, json=payload)
+data = response.json()
+
+if data['success']:
+    access_token = data['data']['tokens']['access_token']
+    print(f"Login successful. Token: {access_token[:20]}...")
+else:
+    print(f"Login failed: {data['error']}")
+```
+
+```php PHP
+<?php
+$url = 'https://api.tattoo.co/v1/auth/login';
+$data = [
+    'email' => 'john.doe@example.com',
+    'password' => 'securePassword123',
+    'remember_me' => true,
+    'device_info' => [
+        'device_type' => 'desktop',
+        'device_name' => 'PHP Client',
+        'app_version' => '1.0.0'
+    ]
+];
+
+$options = [
+    'http' => [
+        'header' => "Content-type: application/json\r\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+$response = json_decode($result, true);
+
+if ($response['success']) {
+    $accessToken = $response['data']['tokens']['access_token'];
+    echo "Login successful. Token: " . substr($accessToken, 0, 20) . "...";
+} else {
+    echo "Login failed: " . $response['error'];
+}
+?>
+```
+
+</CodeGroup>
+
+## Success Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "email": "john.doe@example.com",
+      "full_name": "John Doe",
+      "role": "client",
+      "email_verified": true,
+      "profile_complete": true,
+      "last_login": "2024-01-15T10:30:00Z",
+      "created_at": "2024-01-10T08:15:00Z"
+    },
+    "tokens": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+    },
+    "permissions": [
+      "bookings:create",
+      "bookings:read",
+      "profile:update",
+      "reviews:create"
+    ]
+  },
+  "error": null
+}
+```
+
+## Error Responses
+
+### 400 Bad Request - Missing Credentials
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Email and password are required"
+}
+```
+
+### 401 Unauthorized - Invalid Credentials
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Invalid email or password"
+}
+```
+
+### 403 Forbidden - Account Locked
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Account temporarily locked due to multiple failed login attempts"
+}
+```
+
+### 403 Forbidden - Email Not Verified
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Please verify your email address before logging in"
+}
+```
+
+### 429 Too Many Requests - Rate Limited
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "Too many login attempts. Please try again later"
+}
+```
+
+## Token Usage
+
+Once you receive the access token, include it in the Authorization header for subsequent API requests:
+
+```bash
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## Token Expiration
+
+- **Access Token**: Expires in 1 hour (3600 seconds)
+- **Refresh Token**: Expires in 30 days (or 90 days if `remember_me` is true)
+- Use the [Refresh Token](/api-reference/authentication/refresh) endpoint to obtain new access tokens
+
+## Security Features
+
+### Rate Limiting
+- Maximum 5 failed login attempts per IP address per 15 minutes
+- Account lockout after 10 failed attempts within 1 hour
+- Progressive delays between failed attempts
+
+### Security Monitoring
+- Login attempts are logged with IP address and device information
+- Suspicious activity triggers security alerts
+- Users are notified of logins from new devices
+
+### Password Security
+- Passwords are hashed using bcrypt with salt
+- Support for password complexity requirements
+- Integration with breach detection services
+
+## Multi-Factor Authentication (MFA)
+
+If MFA is enabled for the account, the login process requires an additional step:
+
+```json
+{
+  "success": false,
+  "data": {
+    "mfa_required": true,
+    "mfa_token": "temp_mfa_token_here",
+    "mfa_methods": ["sms", "email", "authenticator"]
+  },
+  "error": "Multi-factor authentication required"
+}
+```
+
+Use the [MFA Verify](/api-reference/authentication/mfa-verify) endpoint to complete authentication.
+
+## Device Management
+
+The `device_info` parameter helps with:
+- Security monitoring and alerts
+- Device-specific token management
+- User session management across devices
+- Analytics and usage tracking
+
+## Related Endpoints
+
+- [Register User](/api-reference/authentication/register) - Create new user account
+- [Refresh Token](/api-reference/authentication/refresh) - Refresh access token
+- [Logout](/api-reference/authentication/logout) - Invalidate tokens
+- [Forgot Password](/api-reference/authentication/forgot-password) - Password reset
+- [MFA Verify](/api-reference/authentication/mfa-verify) - Complete MFA authentication
+
+## Best Practices
+
+1. **Secure Token Storage**: Store tokens securely (keychain on mobile, secure storage on web)
+2. **Token Refresh**: Implement automatic token refresh before expiration
+3. **Logout Handling**: Always call the logout endpoint when user logs out
+4. **Error Handling**: Implement proper error handling for all authentication scenarios
+5. **Security**: Never log or expose tokens in client-side code or logs
